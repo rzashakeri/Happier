@@ -1,0 +1,25 @@
+{% extends 'shared/_base.html' %}
+{% load static %}
+{% load i18n %}
+{% load account socialaccount %}
+{% block title %}
+    {% trans 'password reset' %}
+{% endblock %}
+{% block content %}
+
+    <div class="p-4 my-5">
+        <div class="alert alert-success shadow-lg">
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none"
+                     viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>{% blocktrans %}We have sent an e-mail to you for verification. Follow the link provided to
+                    finalize the signup process. If you do not see the verification e-mail in your main inbox, check
+                    your spam folder. Please contact us if you do not receive the verification e-mail within a few
+                    minutes.{% endblocktrans %}</span>
+            </div>
+        </div>
+    </div>
+{% endblock %}

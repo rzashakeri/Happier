@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html data-theme="light" lang="en">
+<head>
+    {% include 'shared/haeder_references.html' %}
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+<div class="container mx-auto">
+
+{% include 'components/header_component.html' %}
+    {% block content %}
+    {% endblock %}
+    {% include 'components/footer_component.html' %}
+</div>
+</body>
+{% include 'shared/footer_references.html' %}
+</html>
