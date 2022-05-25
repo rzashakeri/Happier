@@ -9,8 +9,9 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-import environ
 from pathlib import Path
+
+import environ
 
 # Initialise environment variables
 env = environ.Env()
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.github',
+    'sorl.thumbnail',
     # Local
     'user_management',
     'feed',
@@ -131,9 +133,8 @@ STATICFILES_DIRS = [
 ]
 
 # Media Files
-MEDIA_ROOT = [
-    BASE_DIR / 'media'
-]
+MEDIA_ROOT = BASE_DIR / 'media'
+
 MEDIA_URL = 'media/'
 
 # Default primary key field type

@@ -14,7 +14,7 @@
                 {% csrf_token %}
                 <div>
                     {% for field in form %}
-                        <div>
+                        <div class="mb-2">
                             {{ field }}
                             {{ field.errors }}
                         </div>

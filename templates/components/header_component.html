@@ -1,3 +1,4 @@
+{% load sorl_thumbnail %}
 <div
         class="navbar bg-base-100 px-5 sticky top-0 z-30 flex h-16 w-full justify-center bg-opacity-50 backdrop-blur transition-all duration-100 text-primary-content"
 >
@@ -774,23 +775,33 @@
                 </div>
             </div>
         </div>
-        <div class="dropdown dropdown-end text-gray-500 ">
-            <label tabindex="0" class="btn gap-1 normal-case btn-ghost">
-                <div class="w-7 rounded-full">
-                    <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-6 w-6"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            stroke-width="2"
-                    >
-                        <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                        />
-                    </svg>
+        <div class="dropdown dropdown-end text-gray-500">
+            <label tabindex="0" class="btn btn-circle gap-1 normal-case btn-ghost">
+                <div class="{% if request.user.is_authenticated %}ring-2 ring-success ring-offset-base-100 ring-offset-3{% endif %} rounded-full">
+                    {% if request.user.is_authenticated %}
+                        {% if request.user.profile_image %}
+                            {% thumbnail request.user.profile_image '35x35' crop='center' quality=100 as img %}
+                                <img class="rounded-full" src="{{ img.url }}"/>
+                            {% endthumbnail %}
+                        {% else %}
+                            <img width="35" src="/static/images/avatar.png"/>
+                        {% endif %}
+                    {% else %}
+                        <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-6 w-6"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="2"
+                        >
+                            <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                            />
+                        </svg>
+                    {% endif %}
                 </div>
             </label>
             {% if request.user.is_authenticated %}
@@ -799,7 +810,7 @@
                         class="mt-3 p-2 shadow menu menu-compact dropdown-content rounded-box w-52 bg-base-100"
                 >
                     <li>
-                        <a href="{% url 'account_login' %}" class="justify-between"> hi {{ request.user }} </a>
+                        <a href="{% url 'account_login' %}" class="justify-between"> hi {{ request.user|capfirst }} </a>
                     </li>
                     <li><a href="{% url 'account_logout' %}">Logout</a></li>
                 </ul>

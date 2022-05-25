@@ -1,0 +1,57 @@
+{% extends 'shared/_base.html' %}
+{% load static %}
+{% load i18n %}
+{% load account socialaccount %}
+{% block title %}
+    {% trans 'password reset' %}
+{% endblock %}
+{% block content %}
+
+    {% if confirmation %}
+
+        {% user_display confirmation.email_address.user as user_display %}
+        <div class="p-4 my-5">
+            <div class="alert alert-success shadow-lg">
+                <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none"
+                         viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>{% blocktrans with confirmation.email_address.email as email %}Please confirm that
+                        <a href="mailto:{{ email }}">{{ email }}</a> is an e-mail address for user {{ user_display }}
+                        .{% endblocktrans %}</span>
+                </div>
+
+                <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+                    {% csrf_token %}
+                    <button class="btn btn-active btn-ghost" type="submit">{% trans 'Confirm' %}</button>
+                </form>
+            </div>
+        </div>
+
+
+
+    {% else %}
+
+        {% url 'account_email' as email_url %}
+        <div class="p-4 my-5">
+            <div class="alert alert-error shadow-lg">
+                <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none"
+                         viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>{% blocktrans %}This e-mail confirmation link expired or is invalid. Please
+                        <a href="{{ email_url }}">issue a new e-mail confirmation request</a>
+                        .{% endblocktrans %}</span>
+                </div>
+            </div>
+        </div>
+
+
+    {% endif %}
+
+
+{% endblock %}
