@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.github',
     'sorl.thumbnail',
+    'phonenumber_field',
     # Local
     'user_management',
     'user_profile',

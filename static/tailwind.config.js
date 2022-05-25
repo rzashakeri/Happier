@@ -1,9 +1,10 @@
 module.exports = {
   content: [
-    '../templates/**/*.{html,js}',
-    '../feed/**/*.{html,js}',
-    '../home/**/*.{html,js}',
-    '../static/js/**/*.{html,js, json}'
+      '../templates/**/*.{html,js}',
+      '../feed/**/*.{html,js}',
+      '../home/**/*.{html,js}',
+      '../user_profile/**/*.{html,js}',
+      '../static/js/**/*.{html,js, json}'
   ],
   darkMode: 'data-theme',
   theme: {
