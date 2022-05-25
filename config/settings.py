@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'sorl.thumbnail',
     # Local
     'user_management',
+    'user_profile',
     'feed',
     'home'
 ]
