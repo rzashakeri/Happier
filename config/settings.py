@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     # Local
     'user_management',
     'user_profile',
+    'templatetag',
     'feed',
     'home'
 ]

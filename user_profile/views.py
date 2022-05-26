@@ -9,6 +9,7 @@ def profile_view(request, username):
     # We check if the user is logged in?
     if request.user.is_authenticated:
         try:
+            profiles = Profile.objects.all()[:4]
             # get user profile by username
             profile = Profile.objects.get(user__username__iexact=username)
         # if user not found raise 404 error
@@ -34,7 +35,8 @@ def profile_view(request, username):
             current_user_profile.save()
         # context data
         context = {
-            'profile': profile
+            'profile': profile,
+            'profiles': profiles
         }
         return render(request, 'user_profile/profile.html', context)
 

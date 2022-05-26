@@ -1,5 +1,6 @@
 {% extends 'shared/_base.html' %}
 {% load sorl_thumbnail %}
+{% load custom_template_tag %}
 {% block title %}
     {{ profile.user.username }}
 {% endblock %}
@@ -54,7 +55,7 @@
                     {% endif %}
                 </div>
                 <p class="w-4/5 ">{{ profile.biography }}</p>
-                <div class="stats bg-base-200 text-primary-content">
+                <div class="stats bg-base-200 text-primary-content mt-2">
 
                     <div class="stat">
                         <div class="stat-title text-base-content">Follower</div>
@@ -63,7 +64,13 @@
 
                     <div class="stat">
                         <div class="stat-title text-base-content">Following</div>
-                        <div class="stat-value text-base-content">{{ profile.follows.count }}</div>
+                        <div class="stat-value text-base-content">
+                            {% if profile.follows.count == 0 %}
+                                0
+                            {% else %}
+                                {{ profile.follows.count|minus }}
+                            {% endif %}
+                        </div>
                     </div>
 
                 </div>
@@ -71,39 +78,23 @@
         </div>
         <div class="w-2/12">
             <p class="text-2xl font-semibold mb-5">Suggest People</p>
-            <div class="flex items-center space-x-3 mt-3">
-                <div class="avatar">
-                    <div class="mask mask-squircle w-12 h-12">
-                        <img src="/static/images/avatar.png" alt="Avatar Tailwind CSS Component"/>
+            {% for profile in profiles %}
+                <div class="flex items-center space-x-3 mt-3">
+                    <div class="avatar">
+                        <div class="mask mask-squircle w-12 h-12">
+                            <img src="/static/images/avatar.png" alt="Avatar Tailwind CSS Component"/>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="font-bold"><a href="{% url 'profile' profile.user.username %}">
+                            {{ profile.user.username }}
+                        </a>
+                        </div>
+                        <div class="text-sm opacity-50 line-clamp-1">{{ profile.biography }}</div>
                     </div>
                 </div>
-                <div>
-                    <div class="font-bold">Hart Hagerty</div>
-                    <div class="text-sm opacity-50">United States</div>
-                </div>
-            </div>
-            <div class="flex items-center space-x-3 mt-3">
-                <div class="avatar">
-                    <div class="mask mask-squircle w-12 h-12">
-                        <img src="/static/images/avatar.png" alt="Avatar Tailwind CSS Component"/>
-                    </div>
-                </div>
-                <div>
-                    <div class="font-bold">Hart Hagerty</div>
-                    <div class="text-sm opacity-50">United States</div>
-                </div>
-            </div>
-            <div class="flex items-center space-x-3 mt-3">
-                <div class="avatar">
-                    <div class="mask mask-squircle w-12 h-12">
-                        <img src="/static/images/avatar.png" alt="Avatar Tailwind CSS Component"/>
-                    </div>
-                </div>
-                <div>
-                    <div class="font-bold">Hart Hagerty</div>
-                    <div class="text-sm opacity-50">United States</div>
-                </div>
-            </div>
+            {% endfor %}
+
 
         </div>
     </section>
