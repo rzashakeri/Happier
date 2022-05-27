@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',
     'sorl.thumbnail',
     'phonenumber_field',
+    'django_render_partial',
     # Local
     'user_management',
     'user_profile',
@@ -149,7 +150,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'user_management.User'
 
 # django-allauth config
-LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = 'home'
 ACCOUNT_LOGOUT_REDIRECT = 'home'
 SITE_ID = 1
@@ -160,11 +160,11 @@ AUTHENTICATION_BACKENDS = (
 
 ACCOUNT_FORMS = {
     "login": "user_management.forms.CustomSigninForm",
-    "add_email": "allauth.account.forms.AddEmailForm",
+    "add_email": "user_management.forms.CustomAddEmailForm",
     "change_password": "allauth.account.forms.ChangePasswordForm",
     "set_password": "allauth.account.forms.SetPasswordForm",
     "reset_password": "user_management.forms.CustomResetPasswordForm",
-    "reset_password_from_key": "user_management.forms.CustomResetPasswordFromKey",
+    "reset_password_from_key": "user_management.forms.CustomResetPasswordFromKeyForm",
     "disconnect": "allauth.socialaccount.forms.DisconnectForm",
     # Use our custom signup form
     "signup": "user_management.forms.CustomSignupForm",
