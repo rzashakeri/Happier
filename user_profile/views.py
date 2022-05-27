@@ -1,4 +1,5 @@
 from allauth.account.decorators import verified_email_required
+from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.shortcuts import render, redirect
@@ -48,32 +49,33 @@ def profile_view(request, username):
 
 
 @verified_email_required
-def edit_profile_view(request, username):
+def edit_profile_view(request):
     # checked user is authenticated
     if request.user.is_authenticated:
-        # checked edit profile for current user is which logged in
-        if request.user.username == username:
-            profile_form = EditProfileForm(instance=request.user)
-            if request.method == 'POST':
-                profile_form = EditProfileForm(request.POST, request.FILES, instance=request.user)
-                if profile_form.is_valid():
-                    profile_form.save()
-                context = {
-                    'profile_form': profile_form
-                }
-                return render(request, 'user_profile/edit_profile.html', context)
-            # pass context
+        # get the edit profile model form
+        profile_form = EditProfileForm(instance=request.user)
+        # check request is post?
+        if request.method == 'POST':
+            # send user data to edit profile form
+            profile_form = EditProfileForm(request.POST, request.FILES, instance=request.user)
+            # check user profile form is valid
+            if profile_form.is_valid():
+                # if user profile is valid, save the form
+                profile_form.save()
+                # show success message when save user data
+                messages.success(request, 'Profile saved')
+            # put edit profile form with context and send to template
             context = {
                 'profile_form': profile_form
             }
-            # return request and template and context
+            # render request and template and context
             return render(request, 'user_profile/edit_profile.html', context)
-        else:
-            """
-            If the logged in user is not the same as the user
-            who wants to edit the profile raise 404 error
-            """
-            raise Http404
+            # pass context
+        context = {
+            'profile_form': profile_form
+        }
+        # return request and template and context
+        return render(request, 'user_profile/edit_profile.html', context)
     # if a user is not authenticated, redirect to login page
     else:
         return redirect(reversed('account_login'))
