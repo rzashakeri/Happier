@@ -25,7 +25,7 @@ class EditProfileForm(forms.ModelForm):
                 'placeholder': 'Username'
             }),
             'biography': forms.Textarea(attrs={
-                'class': 'resize-none mt-1 textarea textarea-bordered',
+                'class': 'resize-none mt-1 textarea textarea-bordered bg-base-100 text-base-content',
                 'placeholder': 'bio',
                 'cols': '42',
                 'rows': '5'
