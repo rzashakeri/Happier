@@ -26,3 +26,7 @@ body {
 ul.errorlist {
     color: #F87272;
 }
+
+input[type="file"] {
+    display: none;
+}

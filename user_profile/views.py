@@ -1,7 +1,9 @@
+from allauth.account.decorators import verified_email_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.shortcuts import render, redirect
 
+from user_profile.forms import EditProfileForm
 from user_profile.models import Profile
 
 
@@ -43,3 +45,35 @@ def profile_view(request, username):
     # if a user is not login in redirecting to login page
     else:
         return redirect('account_login')
+
+
+@verified_email_required
+def edit_profile_view(request, username):
+    # checked user is authenticated
+    if request.user.is_authenticated:
+        # checked edit profile for current user is which logged in
+        if request.user.username == username:
+            profile_form = EditProfileForm(instance=request.user)
+            if request.method == 'POST':
+                profile_form = EditProfileForm(request.POST, request.FILES, instance=request.user)
+                if profile_form.is_valid():
+                    profile_form.save()
+                context = {
+                    'profile_form': profile_form
+                }
+                return render(request, 'user_profile/edit_profile.html', context)
+            # pass context
+            context = {
+                'profile_form': profile_form
+            }
+            # return request and template and context
+            return render(request, 'user_profile/edit_profile.html', context)
+        else:
+            """
+            If the logged in user is not the same as the user
+            who wants to edit the profile raise 404 error
+            """
+            raise Http404
+    # if a user is not authenticated, redirect to login page
+    else:
+        return redirect(reversed('account_login'))

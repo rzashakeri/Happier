@@ -9,8 +9,8 @@
         <div class="w-8/12 flex justify-around mx-3 flex-nowrap">
             <div class="avatar w-4/12 flex justify-center">
                 <div class="rounded-full h-52 w-52">
-                    {% if profile.image %}
-                        {% thumbnail profile.image '208x208' crop=center quality=90 as img %}
+                    {% if profile.user.profile_image %}
+                        {% thumbnail profile.user.profile_image '208x208' crop=center quality=90 as img %}
                             <img alt="user profile image" src="{{ img.url }}"/>
                         {% endthumbnail %}
                     {% else %}
@@ -34,7 +34,11 @@
                         </p>
                     </div>
                     {% if profile.user.username == request.user.username %}
-                        <button class="btn btn-info mr-3">Edit Profile</button>
+                        <button class="btn btn-info mr-3">
+                            <a href="{% url 'edit_profile' request.user.username %}">
+                                Edit Profile
+                            </a>
+                        </button>
                     {% else %}
                         <form method="post">
                             {% csrf_token %}
@@ -54,7 +58,7 @@
                         </form>
                     {% endif %}
                 </div>
-                <p class="w-4/5 ">{{ profile.biography }}</p>
+                <p class="w-4/5 ">{{ profile.user.biography }}</p>
                 <div class="stats bg-base-200 text-primary-content mt-2">
 
                     <div class="stat">
@@ -90,7 +94,7 @@
                             {{ profile.user.username }}
                         </a>
                         </div>
-                        <div class="text-sm opacity-50 line-clamp-1">{{ profile.biography }}</div>
+                        <div class="text-sm opacity-50 line-clamp-1">{{ profile.user.biography }}</div>
                     </div>
                 </div>
             {% endfor %}

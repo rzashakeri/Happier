@@ -780,8 +780,8 @@
                 <label tabindex="0" class="btn btn-circle gap-1 normal-case btn-ghost">
                     <div class="{% if request.user.is_authenticated %}ring-2 ring-success ring-offset-base-100 ring-offset-3{% endif %} rounded-full">
                         {% if request.user.is_authenticated %}
-                            {% if request.user.profile.image %}
-                                {% thumbnail request.user.profile.image '35x35' crop='center' quality=100 as img %}
+                            {% if request.user.profile_image %}
+                                {% thumbnail request.user.profile_image '35x35' crop='center' quality=100 as img %}
                                     <img class="rounded-full" src="{{ img.url }}"/>
                                 {% endthumbnail %}
                             {% else %}
