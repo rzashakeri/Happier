@@ -82,6 +82,8 @@
                     </div>
 
                 </div>
+                <div class="divider"></div>
+
             </div>
         </div>
         <div class="w-2/12">
@@ -90,7 +92,13 @@
                 <div class="flex items-center space-x-3 mt-3">
                     <div class="avatar">
                         <div class="mask mask-squircle w-12 h-12">
-                            <img src="/static/images/avatar.png" alt="Avatar Tailwind CSS Component"/>
+                            {% if profile.user.profile_image %}
+                                {% thumbnail profile.user.profile_image '48x48' crop='center' quality=100 as image %}
+                                    <img src="{{ image.url }}" alt="Avatar Tailwind CSS Component"/>
+                                {% endthumbnail %}
+                            {% else %}
+                                <img src="/static/images/avatar.png" alt="Avatar Tailwind CSS Component"/>
+                            {% endif %}
                         </div>
                     </div>
                     <div>
