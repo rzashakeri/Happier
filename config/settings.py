@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'sorl.thumbnail',
     'phonenumber_field',
     'django_render_partial',
+    'constrainedfilefield',
     # Local
     'user_management',
     'user_profile',
@@ -186,3 +187,5 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = env.int('EMAIL_PORT')
 EMAIL_HOST = env('EMAIL_HOST')
+
+js_checker = True
