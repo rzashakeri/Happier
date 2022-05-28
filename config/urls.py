@@ -27,5 +27,6 @@ urlpatterns = [  # django admin
                   # user_management app
                   path('accounts/', include('allauth.urls')),
                   # user profile app
-                  path('', include('user_profile.urls'))
+                  path('', include('user_profile.urls')),
+                  path('post/', include('post.urls'))
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

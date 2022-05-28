@@ -54,7 +54,8 @@ INSTALLED_APPS = [
     'user_profile',
     'templatetag',
     'feed',
-    'home'
+    'home',
+    'post'
 ]
 
 MIDDLEWARE = [
@@ -158,6 +159,7 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
+# custom form added
 ACCOUNT_FORMS = {
     "login": "user_management.forms.CustomSigninForm",
     "add_email": "user_management.forms.CustomAddEmailForm",
@@ -166,7 +168,6 @@ ACCOUNT_FORMS = {
     "reset_password": "user_management.forms.CustomResetPasswordForm",
     "reset_password_from_key": "user_management.forms.CustomResetPasswordFromKeyForm",
     "disconnect": "allauth.socialaccount.forms.DisconnectForm",
-    # Use our custom signup form
     "signup": "user_management.forms.CustomSignupForm",
 }
 
