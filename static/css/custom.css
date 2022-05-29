@@ -25,6 +25,7 @@ body {
 
 ul.errorlist {
     color: #F87272;
+    max-width: 400px;
 }
 
 input[type="file"] {
