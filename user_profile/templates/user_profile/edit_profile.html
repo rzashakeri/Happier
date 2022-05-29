@@ -53,11 +53,9 @@
                                 <div class="col-span-6 sm:col-span-3">
                                     <div class="label-text">{{ profile_form.email.label }}</div>
                                     {{ profile_form.email }}
-                                    <button class="btn btn-sm btn-active btn-info mt-3">
-                                        <a href="{% url 'account_email' %}">
-                                            Email Management
-                                        </a>
-                                    </button>
+                                    <a class="btn btn-sm btn-active btn-info mt-3" href="{% url 'account_email' %}">
+                                        Email Management
+                                    </a>
 
                                 </div>
                                 <div class="col-span-6 sm:col-span-3">
@@ -86,8 +84,8 @@
                                             {{ profile_form.profile_image }}
                                         </div>
                                     </div>
+                                    {{ profile_form.profile_image.errors }}
                                 </div>
-
                             </div>
                         </div>
                         <div class="px-4 py-3 bg-base-100 text-right sm:px-6">
