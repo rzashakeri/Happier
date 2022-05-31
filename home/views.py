@@ -6,10 +6,11 @@ from user_management.models import User
 
 def home(request):
     login_form = CustomSigninForm()
-    context = {
-        'login_form': login_form
-    }
-    return render(request, 'home/home_layout.html', context)
+    if request.user.is_authenticated:
+        return render(request, "feed/feed.html")
+    else:
+        context = {"login_form": login_form}
+        return render(request, "home/home_layout.html", context)
 
 
 def header_component(request, *args, **kwargs):
@@ -21,7 +22,5 @@ def header_component(request, *args, **kwargs):
         user = User.objects.get(id=request.user.id)
     else:
         user = None
-    context = {
-        'user': user
-    }
-    return render(request, 'components/header_component.html', context)
+    context = {"user": user}
+    return render(request, "components/header_component.html", context)
