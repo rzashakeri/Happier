@@ -187,3 +187,7 @@ EMAIL_HOST = env("EMAIL_HOST")
 # Magic Setting
 MAGIC_FILE_PATH = BASE_DIR / env("MAGIC_FILE_PATH")
 js_checker = True
+
+FILE_UPLOAD_HANDLERS = [
+    "django.core.files.uploadhandler.TemporaryFileUploadHandler",
+]
