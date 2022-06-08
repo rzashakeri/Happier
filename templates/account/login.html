@@ -1,6 +1,8 @@
-{% extends 'shared/_base.html' %}
+{% extends 'shared/base.html' %}
 {% load static %}
 {% load i18n %}
+{% load tailwind_filters %}
+{% load crispy_forms_tags %}
 {% load account socialaccount %}
 
 {% block title %}{% trans "Sign In" %}{% endblock %}
@@ -30,7 +32,6 @@
             </div>
         {% endfor %}
     {% endif %}
-
     <div class="bg-base-200 py-6">
         <div class="bg-white w-full max-w-sm p-6 m-auto bg-base-100 rounded-md shadow-md">
             <h1 class="text-3xl font-semibold text-center">Login</h1>
@@ -38,13 +39,7 @@
             <form class="mt-6 login" id="signin_form" method="post" action="{% url 'account_login' %}">
                 {% csrf_token %}
                 <div>
-                    {% for field in form %}
-                        <div class="mb-2">
-                            {{ field }}
-                            {{ field.errors }}
-                        </div>
-                    {% endfor %}
-                    {{ form.non_field_errors }}
+                    {{ form|crispy }}
 
                     {% if redirect_field_value %}
                         <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
