@@ -19,14 +19,16 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [  # django admin
-                  path('admin/', admin.site.urls),
-                  # local app
-                  path('', include('user_management.urls')),
-                  path('', include('feed.urls')),
-                  path('', include('home.urls')),
-                  # user_management app
-                  path('accounts/', include('allauth.urls')),
-                  # user profile app
-                  path('', include('user_profile.urls')),
-                  path('post/', include('post.urls'))
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path("admin/", admin.site.urls),
+    # local app
+    path("", include("user_management.urls")),
+    path("", include("feed.urls")),
+    path("", include("home.urls")),
+    # user_management app
+    path("accounts/", include("allauth.urls")),
+    path("accounts/", include("allauth_2fa.urls")),
+    path("accounts/", include("allauth.urls")),
+    # user profile app
+    path("", include("user_profile.urls")),
+    path("post/", include("post.urls")),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
