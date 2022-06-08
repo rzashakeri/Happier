@@ -50,6 +50,14 @@ INSTALLED_APPS = [
     "phonenumber_field",
     "django_render_partial",
     "constrainedfilefield",
+    "crispy_forms",
+    "crispy_tailwind",
+    # Configure the django-otp package.
+    "django_otp",
+    "django_otp.plugins.otp_totp",
+    "django_otp.plugins.otp_static",
+    # Enable two-factor auth.
+    "allauth_2fa",
     # Local
     "user_management",
     "user_profile",
@@ -67,6 +75,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_otp.middleware.OTPMiddleware",
+    "allauth_2fa.middleware.TwoFactorMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -156,12 +166,15 @@ AUTHENTICATION_BACKENDS = (
     "allauth.account.auth_backends.AuthenticationBackend",
 )
 
+# Set the allauth adapter to be the 2FA adapter.
+ACCOUNT_ADAPTER = "allauth_2fa.adapter.OTPAdapter"
+
 # custom form added
 ACCOUNT_FORMS = {
     "login": "user_management.forms.CustomSigninForm",
     "add_email": "user_management.forms.CustomAddEmailForm",
-    "change_password": "allauth.account.forms.ChangePasswordForm",
-    "set_password": "allauth.account.forms.SetPasswordForm",
+    "change_password": "user_management.forms.CustomChangePasswordForm",
+    "set_password": "user_management.forms.CustomSetPasswordForm",
     "reset_password": "user_management.forms.CustomResetPasswordForm",
     "reset_password_from_key": "user_management.forms.CustomResetPasswordFromKeyForm",
     "disconnect": "allauth.socialaccount.forms.DisconnectForm",
@@ -183,6 +196,7 @@ EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = env.int("EMAIL_PORT")
 EMAIL_HOST = env("EMAIL_HOST")
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
 
 # Magic Setting
 MAGIC_FILE_PATH = BASE_DIR / env("MAGIC_FILE_PATH")
@@ -191,3 +205,7 @@ js_checker = True
 FILE_UPLOAD_HANDLERS = [
     "django.core.files.uploadhandler.TemporaryFileUploadHandler",
 ]
+
+# Crispy Setting
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+CRISPY_TEMPLATE_PACK = "tailwind"
