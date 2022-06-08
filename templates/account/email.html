@@ -1,4 +1,4 @@
-{% extends "shared/_base.html" %}
+{% extends "shared/base.html" %}
 
 {% load i18n %}
 
@@ -33,74 +33,87 @@
         {% endfor %}
     {% endif %}
 
-    <div class="flex justify-center bg-base-200">
-        <div class="card w-100 bg-base-100 shadow-xl my-5">
-            <div class="card-body">
-                <h2 class="card-title"><h1>{% trans "E-mail Addresses" %}</h1></h2>
-                {% if user.emailaddress_set.all %}
-                    <p class="">{% trans 'The following e-mail addresses are associated with your account:' %}</p>
 
-                    <form action="{% url 'account_email' %}" class="email_list" method="post">
-                        {% csrf_token %}
-                        <fieldset class="blockLabels">
+    <div class="flex w-full justify-center bg-base-200">
+        <div class="flex flex-col lg:flex-row gap-6 my-5 ">
+            {% include 'user_profile/components/sidebar.html' %}
+            <div class="">
+                <div class="bg-base-100 shadow-md rounded-md">
+                    <div class="flex flex-col flex-wrap gap-3 p-5">
+                        <h2 class="">{% trans "E-mail Addresses" %}</h2>
+                        {% if user.emailaddress_set.all %}
+                            <p class="">{% trans 'The following e-mail addresses are associated with your account:' %}</p>
 
-                            {% for emailaddress in user.emailaddress_set.all %}
-                                <div class="ctrlHolder my-3">
-                                    <label for="email_radio_{{ forloop.counter }}"
-                                           class=" flex align-center gap-3  {% if emailaddress.primary %}primary_email{% endif %}">
+                            <form class="" action="{% url 'account_email' %}" class="email_list" method="post">
+                                {% csrf_token %}
+                                <fieldset class="blockLabels">
 
-                                        <input class="checkbox checkbox-sm self-center	"
-                                               id="email_radio_{{ forloop.counter }}"
-                                               type="radio"
-                                               name="email"
-                                               {% if emailaddress.primary or user.emailaddress_set.count == 1 %}checked="checked"{% endif %}
-                                               value="{{ emailaddress.email }}"/>
+                                    {% for emailaddress in user.emailaddress_set.all %}
+                                        <div class="flex ctrlHolder my-3">
+                                            <label for="email_radio_{{ forloop.counter }}"
+                                                   class="flex flex-wrap gap-3 align-center gap-3  {% if emailaddress.primary %}primary_email{% endif %}">
 
-                                        {{ emailaddress.email }}
-                                        {% if emailaddress.verified %}
-                                            <span class="verified badge badge-success gap-2">{% trans "Verified" %}</span>
-                                        {% else %}
-                                            <span class="unverified badge badge-error gap-2">{% trans "Unverified" %}</span>
-                                        {% endif %}
-                                        {% if emailaddress.primary %}
-                                            <span class="primary badge badge-primary">{% trans "Primary" %}</span>{% endif %}
-                                    </label>
-                                </div>
-                            {% endfor %}
+                                                <input class="checkbox checkbox-sm self-center	"
+                                                       id="email_radio_{{ forloop.counter }}"
+                                                       type="radio"
+                                                       name="email"
+                                                       {% if emailaddress.primary or user.emailaddress_set.count == 1 %}checked="checked"{% endif %}
+                                                       value="{{ emailaddress.email }}"/>
 
-                            <div class="buttonHolder my-4 flex gap-5">
-                                <button class="secondaryAction btn btn-sm btn-success" type="submit"
-                                        name="action_primary">{% trans 'Make Primary' %}</button>
-                                <button class="secondaryAction btn btn-sm btn-info" type="submit"
-                                        name="action_send">{% trans 'Re-send Verification' %}</button>
-                                <button class="primaryAction btn btn-sm btn-warning" type="submit"
-                                        name="action_remove">{% trans 'Remove' %}</button>
-                            </div>
+                                                {{ emailaddress.email }}
+                                                {% if emailaddress.verified %}
+                                                    <span class="verified badge badge-success gap-2">{% trans "Verified" %}</span>
+                                                {% else %}
+                                                    <span class="unverified badge badge-error gap-2">{% trans "Unverified" %}</span>
+                                                {% endif %}
+                                                {% if emailaddress.primary %}
+                                                    <span class="primary badge badge-primary">{% trans "Primary" %}</span>{% endif %}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
 
-                        </fieldset>
-                    </form>
+                                    <div class="flex flex-wrap flex-row gap-3 buttonHolder my-4 gap-5">
+                                        <button class="secondaryAction btn btn-sm btn-success max-md:btn-block capitalize"
+                                                type="submit"
+                                                name="action_primary">{% trans 'Make Primary' %}</button>
+                                        <button class="secondaryAction btn btn-sm btn-info max-md:btn-block capitalize"
+                                                type="submit"
+                                                name="action_send">{% trans 'Re-send Verification' %}</button>
+                                        <button class="primaryAction btn btn-sm btn-warning max-md:btn-block capitalize"
+                                                type="submit"
+                                                name="action_remove">{% trans 'Remove' %}</button>
+                                    </div>
 
-                {% else %}
-                    <p>
-                        <strong>{% trans 'Warning:' %}</strong> {% trans "You currently do not have any e-mail address set up. You should really add an e-mail address so you can receive notifications, reset your password, etc." %}
-                    </p>
+                                </fieldset>
+                            </form>
 
-                {% endif %}
+                        {% else %}
+                            <p>
+                                <strong>{% trans 'Warning:' %}</strong> {% trans "You currently do not have any e-mail address set up. You should really add an e-mail address so you can receive notifications, reset your password, etc." %}
+                            </p>
 
-                {% if can_add_email %}
-                    <h2>{% trans "Add E-mail Address" %}</h2>
+                        {% endif %}
 
-                    <form method="post" action="{% url 'account_email' %}" class="add_email">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <button class="btn btn-sm btn-success my-3" name="action_add"
-                                type="submit">{% trans "Add E-mail" %}</button>
-                    </form>
-                {% endif %}
+                        {% if can_add_email %}
+                            <h2>{% trans "Add E-mail Address" %}</h2>
+
+                            <form class="flex flex-col" method="post" action="{% url 'account_email' %}"
+                                  class="add_email">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <button class="btn btn-sm btn-success capitalize my-3" name="action_add"
+                                        type="submit">{% trans "Add E-mail" %}</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+
             </div>
-        </div>
 
+        </div>
     </div>
+
+
 
 {% endblock %}
 
