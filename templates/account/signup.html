@@ -1,4 +1,6 @@
-{% extends 'shared/_base.html' %}
+{% extends 'shared/base.html' %}
+{% load tailwind_filters %}
+{% load crispy_forms_tags %}
 {% load static %}
 {% load i18n %}
 {% load account socialaccount %}
@@ -7,20 +9,13 @@
 
 {% block content %}
     <div class="bg-base-200 py-6">
-
         <div class="w-full max-w-sm p-6 m-auto bg-base-100 rounded-md shadow-md mb-5 mt-5">
             <h1 class="text-3xl font-semibold text-center">Signup</h1>
 
             <form class="mt-6 signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
                 {% csrf_token %}
                 <div>
-                    {% for field in form %}
-                        <div class="mb-2">
-                            {{ field }}
-                            {{ field.errors }}
-                        </div>
-                    {% endfor %}
-
+                    {{ form|crispy }}
                 </div>
 
                 <div class="mt-6">
