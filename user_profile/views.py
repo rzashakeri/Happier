@@ -8,6 +8,7 @@ from user_profile.forms import EditPersonalInformationForm, EditProfileForm
 from user_profile.models import Profile
 
 
+@verified_email_required
 def profile_view(request, username):
     # We check if the user is logged in?
     if request.user.is_authenticated:
@@ -78,6 +79,7 @@ def edit_personal_information(request):
         return redirect(reversed("account_login"))
 
 
+@verified_email_required
 def edit_profile_view(request):
     # checked user is authenticated
     if request.user.is_authenticated:
@@ -108,6 +110,7 @@ def edit_profile_view(request):
         return redirect(reversed("account_login"))
 
 
+@verified_email_required
 def delete_account_view(request):
     if request.user.is_authenticated:
         if request.method == "POST":
@@ -126,3 +129,11 @@ def delete_account_view(request):
         return render(request, "user_profile/delete_account.html")
     else:
         return redirect("account_login")
+
+
+def followers(request, username):
+    return render(request, "user_profile/followers.html")
+
+
+def following(request, username):
+    return render(request, "user_profile/following.html")
