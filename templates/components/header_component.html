@@ -1,7 +1,7 @@
 {% load sorl_thumbnail %}
-<header>
-    <nav
-            class="navbar bg-base-100 px-5 sticky top-0 z-30 flex h-16 w-full justify-center bg-opacity-50 backdrop-blur transition-all duration-100 text-primary-content"
+<header class="w-full flex justify-center bg-base-100">
+    <nav id="navbar"
+         class="navbar w-11/12 flex sticky top-0 z-30 flex h-16 w-full justify-center bg-opacity-50 backdrop-blur transition-all duration-100 text-primary-content"
     >
         <div class="flex-1">
             <a href="{% url 'home' %}" class="font-semibold normal-case text-xl text-gray-500"
@@ -17,7 +17,7 @@
                               clip-rule="evenodd"/>
                     </svg>
                     <span class="hidden md:inline ml-1">
-                        <a class="capitalize" href="{% url 'upload_post' %}">
+                        <a class="capitalize" href="">
                             upload post
                         </a>
                     </span>
