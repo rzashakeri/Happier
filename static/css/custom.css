@@ -31,3 +31,13 @@ ul.errorlist {
 input[type="file"] {
     display: none;
 }
+
+.alert.mb-4 {
+    background-color: #fff;
+    padding: 0;
+    margin-bottom: 1rem;
+}
+
+#navbar {
+    padding: 0;
+}
