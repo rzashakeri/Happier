@@ -5,6 +5,8 @@ from .views import (
     edit_profile_view,
     delete_account_view,
     edit_personal_information,
+    followers,
+    following,
 )
 
 urlpatterns = [
@@ -16,4 +18,6 @@ urlpatterns = [
         name="edit_personal_information",
     ),
     path("accounts/delete", delete_account_view, name="delete_account"),
+    path("<str:username>/followers", followers, name="followers"),
+    path("<str:username>/following", following, name="following"),
 ]
