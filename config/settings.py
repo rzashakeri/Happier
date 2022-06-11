@@ -45,13 +45,14 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-    "allauth.socialaccount.providers.github",
+    "allauth.socialaccount.providers.google",
     "sorl.thumbnail",
     "phonenumber_field",
     "django_render_partial",
     "constrainedfilefield",
     "crispy_forms",
     "crispy_tailwind",
+    "captcha",
     # Configure the django-otp package.
     "django_otp",
     "django_otp.plugins.otp_totp",
@@ -166,6 +167,18 @@ AUTHENTICATION_BACKENDS = (
     "allauth.account.auth_backends.AuthenticationBackend",
 )
 
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "SCOPE": [
+            "profile",
+            "email",
+        ],
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        },
+    }
+}
+
 # Set the allauth adapter to be the 2FA adapter.
 ACCOUNT_ADAPTER = "allauth_2fa.adapter.OTPAdapter"
 
@@ -209,3 +222,9 @@ FILE_UPLOAD_HANDLERS = [
 # Crispy Setting
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = "tailwind"
+
+# Recaptcha Setting
+# RECAPTCHA_PUBLIC_KEY = "6Lflc2EgAAAAAPZ8xpoke8Xdwx_FzoGxgVOVHGUw"
+# RECAPTCHA_PRIVATE_KEY = "6Lflc2EgAAAAAJnlkbDephcOL9Penp5BSuXgUSd2"
+SILENCED_SYSTEM_CHECKS = ["captcha.recaptcha_test_key_error"]
+RECAPTCHA_USE_SSL = True
