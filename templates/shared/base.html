@@ -6,15 +6,12 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-<div class="container mx-auto">
-
     {% render_partial 'home.views.header_component' %}
-    <main>
+    <main class="container mx-auto">
         {% block content %}
         {% endblock %}
     </main>
     {% include 'components/footer_component.html' %}
-</div>
 </body>
 {% include 'shared/footer_references.html' %}
 {% block footer_references %}
