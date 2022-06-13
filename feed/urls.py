@@ -1,3 +1,5 @@
-# from .views import feed
+from django.urls import path
 
-urlpatterns = []
+from .views import feed
+
+urlpatterns = [path("", feed, name="feed")]
