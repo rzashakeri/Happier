@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # from post.forms import UploadPostAttachmentForm, UploadPostForm
 from user_management.forms import CustomSigninForm
@@ -7,7 +7,7 @@ from user_management.models import User
 
 def home(request):
     if request.user.is_authenticated:
-        return render(request, "feed/feed.html")
+        return redirect("feed")
     else:
         login_form = CustomSigninForm()
         context = {"login_form": login_form}
