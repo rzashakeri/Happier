@@ -35,13 +35,46 @@
                     {% csrf_token %}
                     <div class="shadow sm:rounded-md sm:overflow-hidden">
                         <div class="px-4 py-5 bg-base-100 space-y-6 sm:p-6">
-                            <div class="grid grid-cols-4 gap-6">
-                                <div class="col-span-6 sm:col-span-3 flex flex-col">
+                            <div class="grid grid-cols-1 gap-6">
+                                <div class="sm:col-span-3 flex flex-col">
                                     <div class="label-text mb-1">{{ profile_form.biography.label }}</div>
                                     {{ profile_form.biography }}
                                     {{ profile_form.biography.errors }}
                                 </div>
-                                <div class="col-span-6 lg:col-span-1 flex">
+                                <div class="grid grid-rows-2 gap-2">
+                                    <div class="sm:col-span-1 w-fit">
+                                        <div class="mb-3 label-text">
+                                            {{ profile_form.birthday.label }}
+                                        </div>
+                                        <div class="flex gap-x-2">
+                                            <div class="inset-y-0 left-0 flex items-center pointer-events-none">
+                                                <svg class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                                     fill="currentColor"
+                                                     viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd"
+                                                          d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                                                          clip-rule="evenodd"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="bg-base-100">
+                                                {{ profile_form.birthday }}
+                                                {{ profile_form.birthday.errors }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="sm:col-span-1">
+                                        <div class="mb-2 label-text">
+                                            What Is Your Job ?
+                                        </div>
+                                        <div class="w-60">
+                                            <div class="bg-base-100">
+                                                {{ profile_form.job }}
+                                                {{ profile_form.job.errors }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="lg:col-span-1 flex sm:justify-center">
                                     <div class="mt-1 gap-3 flex flex-row items-center gap-y-3 self-start lg:flex-col">
                                         <label class="label-text"> {{ profile_form.profile_image.label }} </label>
 
@@ -64,26 +97,6 @@
                                         </div>
                                     </div>
                                     {{ profile_form.profile_image.errors }}
-                                </div>
-                                <div class="col-span-6 sm:col-span-3">
-                                    <div class="mb-2">
-                                        {{ profile_form.birthday.label }}
-                                    </div>
-                                    <div class="flex gap-x-2">
-                                        <div class="inset-y-0 left-0 flex items-center pointer-events-none">
-                                            <svg class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                                                 fill="currentColor"
-                                                 viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd"
-                                                      d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                                                      clip-rule="evenodd"></path>
-                                            </svg>
-                                        </div>
-                                        <div class="bg-base-100">
-                                            {{ profile_form.birthday }}
-                                            {{ profile_form.birthday.errors }}
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
