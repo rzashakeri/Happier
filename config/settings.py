@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_tailwind",
     "captcha",
+    "formtools",
     # Configure the django-otp package.
     "django_otp",
     "django_otp.plugins.otp_totp",
@@ -224,7 +225,5 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = "tailwind"
 
 # Recaptcha Setting
-# RECAPTCHA_PUBLIC_KEY = "6Lflc2EgAAAAAPZ8xpoke8Xdwx_FzoGxgVOVHGUw"
-# RECAPTCHA_PRIVATE_KEY = "6Lflc2EgAAAAAJnlkbDephcOL9Penp5BSuXgUSd2"
 SILENCED_SYSTEM_CHECKS = ["captcha.recaptcha_test_key_error"]
 RECAPTCHA_USE_SSL = True
