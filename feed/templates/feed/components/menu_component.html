@@ -2,7 +2,7 @@
     <section>
         <ul class="menu p-1 rounded-box">
             <li>
-                <a>
+                <a href="{% url 'feed' %}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                          stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -42,7 +42,7 @@
                 </a>
             </li>
             <li>
-                <a>
+                <a href="{% url 'profile' request.user.username %}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                          stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -52,7 +52,7 @@
                 </a>
             </li>
             <li>
-                <a>
+                <a href="{% url 'edit_profile' %}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                          stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round"
