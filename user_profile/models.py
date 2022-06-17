@@ -35,6 +35,7 @@ class Profile(models.Model):
         max_upload_size=10485760,
     )
     biography = models.CharField(max_length=200, null=True, blank=True)
+    job = models.CharField(max_length=20, null=True, blank=True)
 
     def __str__(self):
         return self.user.username
