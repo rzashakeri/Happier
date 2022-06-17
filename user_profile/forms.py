@@ -66,7 +66,7 @@ class EditProfileForm(forms.ModelForm):
     class Meta:
         year = datetime.date.today().year
         model = Profile
-        fields = ["profile_image", "birthday", "biography"]
+        fields = ["profile_image", "birthday", "biography", "job"]
         widgets = {
             "biography": forms.Textarea(
                 attrs={
@@ -78,4 +78,10 @@ class EditProfileForm(forms.ModelForm):
             ),
             "profile_image": forms.FileInput(attrs={"class": ""}),
             "birthday": forms.SelectDateWidget(years=range(1950, year)),
+            "job": forms.TextInput(
+                attrs={
+                    "class": "input input-bordered w-full mt-1",
+                    "placeholder": "Job",
+                }
+            ),
         }
