@@ -8,9 +8,13 @@ from allauth.account.forms import (
     SetPasswordForm,
 )
 from crispy_forms.helper import FormHelper
+from django import forms
 
 
 class CustomSignupForm(SignupForm):
+    first_name = forms.CharField(max_length=30, label="First Name")
+    last_name = forms.CharField(max_length=30, label="Lirst Name")
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["username"].widget.attrs[
@@ -25,7 +29,59 @@ class CustomSignupForm(SignupForm):
         self.fields["password2"].widget.attrs[
             "class"
         ] = "block w-full mt-2 input input-bordered w-full max-w-xs"
+        self.fields["first_name"].widget.attrs["placeholder"] = "First Name"
+        self.fields["last_name"].widget.attrs["placeholder"] = "Last Name"
         self.helper = FormHelper(self)
+
+    def save(self, request):
+        user = super(CustomSignupForm, self).save(request)
+        user.first_name = self.cleaned_data["first_name"]
+        user.last_name = self.cleaned_data["last_name"]
+        user.save()
+
+
+# Signup Form in Separate Step
+class SignupFormStepOne(forms.Form):
+    first_name = forms.CharField(max_length=30, label="First Name")
+
+
+class SignupFormStepTwo(forms.Form):
+    last_name = forms.CharField(max_length=30, label="Lirst Name")
+
+
+class SignupFormStepThree(SignupForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["username"].widget.attrs[
+            "class"
+        ] = "block w-full mt-2 input input-bordered w-full max-w-xs"
+        self.fields.pop("email")
+        self.fields.pop("password1")
+        self.fields.pop("password2")
+
+
+class SignupFormStepFour(SignupForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["email"].widget.attrs[
+            "class"
+        ] = "block w-full mt-2 input input-bordered w-full max-w-xs"
+        self.fields.pop("username")
+        self.fields.pop("password1")
+        self.fields.pop("password2")
+
+
+class SignupFormStepFive(SignupForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["password1"].widget.attrs[
+            "class"
+        ] = "block w-full mt-2 input input-bordered w-full max-w-xs"
+        self.fields["password2"].widget.attrs[
+            "class"
+        ] = "block w-full mt-2 input input-bordered w-full max-w-xs"
+        self.fields.pop("username")
+        self.fields.pop("email")
 
 
 class CustomSigninForm(LoginForm):
