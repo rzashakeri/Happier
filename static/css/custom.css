@@ -41,3 +41,83 @@ input[type="file"] {
 #navbar {
     padding: 0;
 }
+
+.audio-element {
+    display: none;
+}
+
+.first-wave {
+    height: 70px !important;
+    width: 470px;
+    overflow: hidden !important;
+}
+
+.play-button-icon, .volume-icon {
+    filter: invert(0.6)
+}
+
+#waveform {
+    position: relative;
+}
+
+.player-body {
+    position: relative;
+}
+
+/* Custom volume slider */
+
+.volume-slider {
+    margin: 0 1rem;
+    cursor: pointer;
+    width: 100%;
+    height: 0.3rem;
+    outline: none;
+    -webkit-appearance: none;
+    background: #EFEFEF;
+    border-radius: 10px;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 1rem;
+    width: 1rem;
+    border: none;
+    border-radius: 50%;
+    background: #2D5BFF;
+    margin-top: -0.6rem;
+    color: #EFEFEF;
+}
+
+.volume-slider::-moz-range-thumb {
+    -webkit-appearance: none;
+    height: 1rem;
+    width: 1rem;
+    border: none;
+    border-radius: 50%;
+    background: #2D5BFF;
+
+}
+
+.volume-slider::-ms-thumb {
+    -webkit-appearance: none;
+    height: 1rem;
+    width: 1rem;
+    border: none;
+    border-radius: 50%;
+    background: #9ca3af;
+}
+
+.volume-slider::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 0.25rem;
+    background-color: #9ca3af;
+    border-radius: 10px;
+}
+
+.volume-slider::-ms-track {
+    color: #0c0b0e;
+    width: 100%;
+    height: 0.25rem;
+    background-color: #9ca3af;
+    border-radius: 10px;
+}
