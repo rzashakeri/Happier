@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
-    "django.contrib.sessions",
+    "user_sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
@@ -71,7 +71,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
+    "user_sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -160,7 +160,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "user_management.User"
 
 # django-allauth config
-LOGIN_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "feed"
+LOGOUT_REDIRECT_URL = "home"
 ACCOUNT_LOGOUT_REDIRECT = "home"
 SITE_ID = 1
 AUTHENTICATION_BACKENDS = (
@@ -225,5 +226,8 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = "tailwind"
 
 # Recaptcha Setting
-SILENCED_SYSTEM_CHECKS = ["captcha.recaptcha_test_key_error"]
+SILENCED_SYSTEM_CHECKS = ["captcha.recaptcha_test_key_error", "admin.E410"]
 RECAPTCHA_USE_SSL = True
+
+# django user sessions
+SESSION_ENGINE = "user_sessions.backends.db"
