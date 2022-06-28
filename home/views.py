@@ -24,4 +24,4 @@ def header_component(request, *args, **kwargs):
     else:
         user = None
     context = {"user": user}
-    return render(request, "components/header_component.html", context)
+    return render(request, "components/header/header_component.html", context)
