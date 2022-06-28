@@ -54,6 +54,9 @@ INSTALLED_APPS = [
     "crispy_tailwind",
     "captcha",
     "formtools",
+    "fluent_comments",
+    "threadedcomments",
+    "django_comments",
     # Configure the django-otp package.
     "django_otp",
     "django_otp.plugins.otp_totp",
@@ -203,6 +206,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = "home"
+ACCOUNT_SIGNUP_PASSWORD_VERIFICATION = False
 
 # Email Setting
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -231,3 +235,28 @@ RECAPTCHA_USE_SSL = True
 
 # django user sessions
 SESSION_ENGINE = "user_sessions.backends.db"
+
+# django fluent comments
+COMMENTS_APP = "fluent_comments"
+FLUENT_COMMENTS_EXCLUDE_FIELDS = ("name", "email", "url", "title")
+FLUENT_COMMENTS_FORM_CLASS = "post.forms.CommentForm"
+FLUENT_COMMENTS_REPLACE_ADMIN = True
+
+# Moderation
+FLUENT_COMMENTS_DEFAULT_MODERATOR = "default"
+FLUENT_COMMENTS_CLOSE_AFTER_DAYS = None
+FLUENT_COMMENTS_MODERATE_BAD_WORDS = ()
+FLUENT_COMMENTS_MODERATE_AFTER_DAYS = None
+FLUENT_COMMENTS_USE_EMAIL_NOTIFICATION = True
+FLUENT_COMMENTS_MULTIPART_EMAILS = False
+
+# Form layouts
+FLUENT_COMMENTS_FIELD_ORDER = ()
+FLUENT_COMMENTS_FORM_CSS_CLASS = "comments-form form-horizontal"
+FLUENT_COMMENTS_LABEL_CSS_CLASS = "col-sm-2"
+FLUENT_COMMENTS_FIELD_CSS_CLASS = "col-sm-10"
+
+# Compact style settings
+FLUENT_COMMENTS_COMPACT_FIELDS = ("name", "email", "url")
+FLUENT_COMMENTS_COMPACT_GRID_SIZE = 12
+FLUENT_COMMENTS_COMPACT_COLUMN_CSS_CLASS = "col-sm-{size}"
