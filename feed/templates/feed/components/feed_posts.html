@@ -1,0 +1,14 @@
+{% load thumbnail %}
+{% load static %}
+{% load comments static %}
+<section>
+    <h1 class="text-3xl font-bold mt-10 capitalize">Hi {{ request.user.get_full_name }} 🖐️</h1>
+    {% for follower in request.user.profile.follows.all %}
+        {% for post in follower.user.post_set.all %}
+            <div class="my-5 rounded-md shadow-md overflow-hidden">
+                {% include 'post/components/post_component.html' %}
+            </div>
+        {% endfor %}
+    {% endfor %}
+</section>
+
