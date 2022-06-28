@@ -14,14 +14,9 @@
 
             <form class="mt-6 signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
                 {% csrf_token %}
-                <div class="grid grid-cols-2 gap-4">
-                    {{ form.first_name|as_crispy_field }}
-                    {{ form.last_name|as_crispy_field }}
-                </div>
                 {{ form.username|as_crispy_field }}
                 {{ form.email|as_crispy_field }}
                 {{ form.password1|as_crispy_field }}
-                {{ form.password2|as_crispy_field }}
 
 
                 <div class="mt-6">
