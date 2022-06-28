@@ -82,6 +82,19 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{% url 'user_sessions:session_list' %}"
+                       class="flex items-center p-2 text-base font-normal rounded-lg hover:bg-base-200 {% if request.resolver_match.url_name == 'session_list' %} bg-base-200 {% endif %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none"
+                             viewBox="0 0 24 24"
+                             stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        <span class="flex-1 ml-3 whitespace-nowrap">Active Session</span>
+                    </a>
+                </li>
+                <li>
                     <a href="{% url 'account_logout' %}"
                        class="flex items-center p-2 rounded-lg hover:bg-base-200 {% if request.resolver_match.url_name == 'account_logout' %} bg-base-200 {% endif %}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none"
