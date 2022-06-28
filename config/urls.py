@@ -32,4 +32,6 @@ urlpatterns = [  # django admin
     path("", include("user_profile.urls")),
     path("post/", include("post.urls")),
     re_path(r"", include("user_sessions.urls", "user_sessions")),
+    re_path(r"^comments/", include("django_comments.urls")),
+    re_path(r"^blog/comments/", include("fluent_comments.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
