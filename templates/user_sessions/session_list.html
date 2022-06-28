@@ -1,0 +1,92 @@
+{% extends "shared/base.html" %}
+{% load user_sessions i18n %}
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+
+            <div class="w-full text-white bg-emerald-500">
+                <div class="container flex items-center justify-between px-6 py-4 mx-auto">
+                    <div class="flex">
+                        <svg viewBox="0 0 40 40" class="w-6 h-6 fill-current">
+                            <path d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM16.6667 28.3333L8.33337 20L10.6834 17.65L16.6667 23.6166L29.3167 10.9666L31.6667 13.3333L16.6667 28.3333Z"></path>
+                        </svg>
+
+                        <p class="mx-3">{{ message }}</p>
+                    </div>
+
+                    <button onclick='this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode); return false;'
+                            class="p-1 transition-colors duration-200 transform rounded-md hover:bg-opacity-25 hover:bg-gray-600 focus:outline-none">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                  stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% trans "<em>unknown on unknown</em>" as unknown_on_unknown %}
+    {% trans "<em>unknown</em>" as unknown %}
+
+    <div class="flex-col py-5 lg:flex-row justify-center bg-base-200">
+        <div class="flex flex-col lg:flex-row justify-center md:gap-6">
+            {% include 'user_profile/components/sidebar.html' %}
+            <div class="mt-5 md:mt-0 rounded-lg relative overflow-x-auto">
+                <div class=" shadow-md bg-base-100 rounded-lg flex min-h-[6rem] min-w-[18rem] max-w-4xl flex-wrap items-center justify-center gap-2 overflow-x-hidden border bg-cover bg-top"
+                     style="background-size: 5px 5px">
+                    <div class="overflow-x-auto w-full">
+                        <table class="table w-full ">
+                            <thead>
+                            <tr class="bg-base-100">
+                                <th>{% trans "Location" %}</th>
+                                <th>{% trans "Device" %}</th>
+                                <th>{% trans "Last Activity" %}</th>
+                                <th>{% trans "Delete" %}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for object in object_list %}
+                                <tr {% if object.session_key == session_key %}class="active"{% endif %}>
+                                    <td>{{ object.ip|location|default_if_none:unknown|safe }}
+                                        <small>({{ object.ip }})</small>
+                                    </td>
+                                    <td>{{ object.user_agent|device|default_if_none:unknown_on_unknown|safe }}</td>
+                                    <td>
+                                        {% if object.session_key == session_key %}
+                                            {% blocktrans with time=object.last_activity|timesince %}{{ time }} ago
+                                                (this
+                                                session)
+                                            {% endblocktrans %}
+                                        {% else %}
+                                            {% blocktrans with time=object.last_activity|timesince %}{{ time }} ago
+                                            {% endblocktrans %}
+                                        {% endif %}
+                                    </td>
+                                    {% if object.session_key != session_key %}
+                                        <form method="post" action="{% url 'user_sessions:session_delete' object.pk %}">
+                                            {% csrf_token %}
+                                            <td>
+                                                <button type="submit" class="btn btn-sm btn-error"
+                                                >Delete
+                                                </button>
+                                            </td>
+                                        </form>
+                                    {% else %}
+                                        <td class="justify-center p-5">
+                                            <p class="badge badge-success p-3.5">Active</p>
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
