@@ -74,25 +74,7 @@
                 </div>
             </div>
         {% elif post.video %}
-            <video
-                    id="my-video"
-                    class="video-js video-js-custom vjs-big-play-centered"
-                    controls
-                    preload="auto"
-                    width="521"
-                    height="450"
-                    data-setup="{}"
-            >
-                <source src="{{ post.video.file.url }}" type="video/mp4"/>
-                <source src="{{ post.video.file.url }}" type="video/webm"/>
-                <p class="vjs-no-js">
-                    To view this video please enable JavaScript, and consider upgrading to a
-                    web browser that
-                    <a href="https://videojs.com/html5-video-support/" target="_blank"
-                    >supports HTML5 video</a
-                    >
-                </p>
-            </video>
+            {% include "post/components/video_component.html" %}
         {% endif %}
 
 
