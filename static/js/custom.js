@@ -139,59 +139,53 @@ $.ajaxSetup({
     }
 });
 
+window.addEventListener('load', function () {
+    let like_form = document.querySelectorAll('#like-form');
+    if (like_form != null) {
+        like_form.forEach(item => {
+            item.addEventListener('submit', function (event) {
+                event.preventDefault();
+                let PostId = item.querySelector("#like-post-id").value;
+                console.log(PostId)
+
+                $.ajax({
+                    url: "/post/like/" + PostId + "/",
+                    type: "POST",
+                    data: {post_id: PostId},
+                    success: function (json) {
+                        if (json.result === "liked") {
+                            let LikeCount = item.querySelector("#like-count");
+                            LikeCount.textContent = json.like_count;
+                            let LikeSvg = item.querySelector("#Like-svg");
+                            LikeSvg.setAttribute("class", "h-6 w-6 fill-rose-600 liked");
+                            LikeSvg.setAttribute("stroke", "");
+                        } else if (json.result === "unliked") {
+                            $('#like-count').text(json.like_count);
+                            let LikeCount = item.querySelector("#like-count");
+                            LikeCount.textContent = json.like_count;
+
+                            let LikeSvg = item.querySelector("#Like-svg");
+                            LikeSvg.setAttribute("class", "h-6 w-6 unliked");
+                            LikeSvg.setAttribute("stroke", "currentColor");
+
+
+                        }
+
+                    },
+
+                    error: function (xhr, errmsg, err) {
+                        $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+                            " <a href='#' class='close'>&times;</a></div>");
+                        console.log(xhr.status + ": " + xhr.responseText);
+                    }
+                });
+            });
+        })
+    }
+})
+
 // like ajax
-$('#like-form').on('submit', function (event) {
-    event.preventDefault();
-    console.log("form submitted!")
-    let PostId = $('#like-post-id').val();
-
-    $.ajax({
-        url: "/post/like/" + PostId + "/",
-        type: "POST",
-        data: {post_id: PostId},
-        success: function (json) {
-            $('#post-text').val('');
-            console.log(json.like_count)
-            $('#like-count').text(json.like_count)
-            console.log(json);
-            console.log("success");
-        },
-
-        error: function (xhr, errmsg, err) {
-            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
-                " <a href='#' class='close'>&times;</a></div>");
-            console.log(xhr.status + ": " + xhr.responseText);
-        }
-    });
-});
-
-$('#comment-form').on("submit", function (event) {
-    event.preventDefault();
-    let PostId = $("#comment-post-id").val();
-    let CommentText = $("#comment-text").val();
-    $.ajax({
-        url: "/post/comment/create/" + PostId + "/",
-        method: "POST",
-        data: {post_id: PostId, text: CommentText},
-
-        success: function (json) {
-            console.log(json)
-            if (json.result === "NOK") {
-                $("#comment-form").addClass("border-2 border-rose-600");
-            } else if (json.result === "OK") {
-                $("#comment-count").text(json.comment_count)
-            }
-        },
-
-        error: function (json) {
-            console.log('faild')
-            console.log(json)
-        }
-
-    });
-});
 
 $('#id_password1').hidePassword(true);
 $('#id_password').hidePassword(true);
-
 
