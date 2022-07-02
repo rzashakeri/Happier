@@ -8,10 +8,7 @@
         <div class="flex gap-5">
             {% include "post/components/profile_image_component.html" %}
             <div class="flex flex-col justify-center ">
-                <a href="{% url 'profile' post.user.username %}">
-                    <h1 class="text-xl font-bold capitalize">{{ post.user.get_full_name }}</h1>
-                    <p>@{{ post.user.username }}</p>
-                </a>
+                {% include "post/components/profile_information_component.html" %}
             </div>
         </div>
         <div class="flex justify-center items-center">
