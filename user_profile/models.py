@@ -3,6 +3,7 @@ import uuid
 from birthday import BirthdayField, BirthdayManager
 from constrainedfilefield.fields import ConstrainedImageField
 from django.db import models
+from django.urls import reverse
 
 from user_management.models import User
 
@@ -39,3 +40,6 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    def get_absolute_url(self):
+        return reverse("profile", kwargs={"username": self.user.username})
