@@ -1,0 +1,21 @@
+{% load sorl_thumbnail %}
+<header class="w-full flex justify-center z-40 bg-base-100 sticky top-0 drop-shadow-md">
+    <nav id="navbar"
+         class="navbar mx-8 flex sticky top-0  flex h-16 w-full justify-center text-primary-content"
+    >
+        <div class="flex-1">
+            <a href="{% url 'home' %}" class="font-semibold normal-case text-xl text-gray-500"
+            >Happier</a
+            >
+        </div>
+        <div class="flex-none">
+            {% if request.user.is_authenticated %}
+                {% include 'components/header/create_post_component.html' %}
+            {% endif %}
+            {% include 'components/header/themes_component.html' %}
+            {% include 'components/header/notification_component.html' %}
+
+            {% include 'components/header/profile_component.html' %}
+        </div>
+    </nav>
+</header>
