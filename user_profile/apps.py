@@ -6,4 +6,4 @@ class UserProfileConfig(AppConfig):
     name = "user_profile"
 
     def ready(self):
-        pass
+        import user_profile.signals
