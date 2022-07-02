@@ -1,0 +1,43 @@
+<div class="music-player flex flex-col gap-4 w-full">
+    <p class="player-title text-xl font-bold ml-3">{{ post.audio.name }}
+        - {{ post.audio.artist }}</p>
+    <div class="player-body flex justify-between w-full">
+        <div id="waveform" class="audio-player flex gap-3  w-full "
+             src="http://127.0.0.1:8000/media/{{ post.audio.file }}">
+            <button id="playButton" class="playbackBtn self-center w-12 h-12">
+                <img
+                        id="playButtonIcon"
+                        class="play-button-icon"
+                        src="/static/images/player/play.svg"
+                        alt="Play Button"
+                />
+            </button>
+        </div>
+    </div>
+    <div class="controls flex justify-between">
+        <div class="volume flex gap-3 items-center ml-3">
+            <img
+                    id="volumeIcon"
+                    class=" tooltip tooltip-bottom volume-icon h-6 w-6 cursor-pointer "
+                    src="/static/images/player/volume.svg"
+                    alt="Volume"
+                    data-tip="mute/unmute"
+            />
+
+            <input
+                    id="volumeSlider"
+                    class="volume-slider flex items-center"
+                    type="range"
+                    name="volume-slider"
+                    min="0"
+                    max="100"
+                    value="50"
+            />
+        </div>
+        <div class="timecode">
+            <span class="currentTime" id="currentTime">00:00:00</span>
+            <span>/</span>
+            <span class="totalDuration" id="totalDuration">00:00:00</span>
+        </div>
+    </div>
+</div>
