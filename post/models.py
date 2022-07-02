@@ -4,7 +4,7 @@ from audio_validator.validator import AudioValidator
 from constrainedfilefield.fields import ConstrainedFileField, ConstrainedImageField
 from django.core.files.uploadedfile import TemporaryUploadedFile
 from django.db import models
-from django_comments.abstracts import CommentAbstractModel, BaseCommentAbstractModel
+from django.urls import reverse
 from tbm_utils import humanize_filesize
 
 from user_management.models import User
@@ -23,6 +23,12 @@ class Post(models.Model):
 
     def __str__(self):
         return str(self.caption[:9])
+
+    def get_absolute_url(self):
+        return reverse(
+            "show_post",
+            kwargs={"slug": self.slug},
+        )
 
 
 class Image(models.Model):
@@ -98,7 +104,7 @@ class Audio(models.Model):
         return str(self.name)
 
 
-class Like(models.Model):
+class PostLike(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     post = models.ForeignKey("Post", on_delete=models.CASCADE)
