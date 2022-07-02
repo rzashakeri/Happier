@@ -2,6 +2,7 @@ module.exports = {
     content: [
         '../templates/**/*.{html,js}',
         '../feed/**/*.{html,js}',
+        '../comment/**/*.{html,js}',
         '../home/**/*.{html,js}',
         '../user_profile/**/*.{html,js}',
         '../static/**/*.{html,js}',
