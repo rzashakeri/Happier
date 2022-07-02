@@ -1,0 +1,23 @@
+{% load custom_template_tag %}
+<div class="media flex p-5">
+    <a class="mr-4" href="#">
+        {% if comment.user.profile.profile_image %}
+            <img class="rounded-full max-w-none w-12 h-12" src="{{ comment.user.profile.profile_image.url }}"/>
+        {% else %}
+            <img class="rounded-full max-w-none w-12 h-12" src="/static/images/avatar.png"/>
+        {% endif %}
+    </a>
+    <div class="media-body">
+        <div>
+            <a class="inline-block text-base font-bold mr-2" href="#">{{ comment.user }}</a>
+            <span class="text-slate-500">{{ comment.created_at|time_format }}</span>
+        </div>
+        <p>{{ comment.text }}</p>
+        <div class="mt-2 flex items-center">
+            {% include "comment/comment_like.html" %}
+            <a class="link link-hover">
+                reply
+            </a>
+        </div>
+    </div>
+</div>
