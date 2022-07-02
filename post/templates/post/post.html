@@ -20,21 +20,12 @@
     </div>
     <div class="w-full">
         {% if post.image %}
-            {% if post.image.file|is_portrait %}
-                {% thumbnail post.image.file "521x521" crop="center" quality=100 as img %}
-                    <img class="w-fit portrait" src="{{ img.url }}" alt="">
-                {% endthumbnail %}
-            {% else %}
-                {% thumbnail post.image.file "521x521" quality=100 as img %}
-                    <img class="w-fit" src="{{ img.url }}" alt="">
-                {% endthumbnail %}
-            {% endif %}
+            {% include "post/components/image_component.html" %}
         {% elif post.audio %}
             {% include "post/components/audio_component.html" %}
         {% elif post.video %}
             {% include "post/components/video_component.html" %}
         {% endif %}
-
 
     </div>
 
