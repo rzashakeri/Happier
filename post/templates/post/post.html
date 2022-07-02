@@ -6,7 +6,7 @@
 <div class="w-fit flex flex-col gap-5 justify-between bg-base-100 p-5">
     <div class="flex justify-between w-full">
         <div class="flex gap-5">
-            {% include "post/components/avatar_component.html" %}
+            {% include "post/components/profile_image_component.html" %}
             <div class="flex flex-col justify-center ">
                 <a href="{% url 'profile' post.user.username %}">
                     <h1 class="text-xl font-bold capitalize">{{ post.user.get_full_name }}</h1>
