@@ -1,0 +1,12 @@
+{% load thumbnail %}
+<div class="avatar">
+    <div class="w-16 rounded-full">
+        {% if post.user.profile.profile_image %}
+            {% thumbnail post.user.profile.profile_image "64x64" crop="center" quality=100 as img %}
+                <img src="{{ img.url }}" alt="{{ request.user.username }}">
+            {% endthumbnail %}
+        {% else %}
+            <img alt="user profile image" src="/static/images/avatar.png"/>
+        {% endif %}
+    </div>
+</div>
