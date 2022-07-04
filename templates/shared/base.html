@@ -6,15 +6,19 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-    {% render_partial 'home.views.header_component' %}
-    <main class="container mx-auto">
-        {% block content %}
-        {% endblock %}
-    </main>
-    {% include 'components/footer/footer_component.html' %}
+<div class="drawer">
+    <input id="my-drawer-3" type="checkbox" class="drawer-toggle"/>
+    <div class="drawer-content flex flex-col">
+        {% render_partial 'home.views.header_component' %}
+        <main class="container mx-auto">
+            {% block content %}
+            {% endblock %}
+        </main>
+        {% include 'components/footer/footer_component.html' %}
+    </div>
+    {% include "components/header/drawer_side_component.html" %}
+</div>
 </body>
 {% include 'shared/footer_references.html' %}
-{% block footer_references %}
-
-{% endblock %}
+{% block footer_references %}{% endblock %}
 </html>
