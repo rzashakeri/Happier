@@ -5,10 +5,8 @@ module.exports = {
         '../comment/**/*.{html,js}',
         '../home/**/*.{html,js}',
         '../user_profile/**/*.{html,js}',
-        '../static/**/*.{html,js}',
         '../post/**/*.{html,js}',
         '../venv/Lib/site-packages/crispy_tailwind/templates/**/*.{html,js}',
-
     ],
     darkMode: 'data-theme',
     theme: {
