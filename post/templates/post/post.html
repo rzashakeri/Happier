@@ -44,11 +44,4 @@
         {% include "post/components/save_component.html" %}
     </div>
 
-    <div id="comment-list">
-        {% for comment in post.comment_set.all %}
-            <div id="comment-{{ comment.id }}">
-                {% include "comment/comment.html" with comment=comment %}
-            </div>
-        {% endfor %}
-    </div>
 </div>
