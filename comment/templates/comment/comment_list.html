@@ -1,0 +1,9 @@
+<div id="comment-list">
+    <div class="bg-base-100">
+        {% for comment in post.comment_set.all %}
+            <div id="comment-{{ comment.id }}">
+                {% include "comment/comment.html" with comment=comment %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
