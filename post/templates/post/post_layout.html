@@ -1,0 +1,26 @@
+{% extends "shared/base.html" %}
+{% load render_partial %}
+{% block title %}
+    {{ post.caption|slice:":6" }} - {{ post.user.username }}
+{% endblock %}
+{% block content %}
+    <div class="flex justify-evenly bg-base-200">
+        <div class="w-3/12">
+        </div>
+        <div class="w-5/12">
+            <div class="px-9">
+                <div class="shadow-md rounded-md overflow-hidden my-5">
+                    {% render_partial "post.views.post_view" post_id=post.pk %}
+                    {% render_partial "comment.views.create_comment" post_id=post.pk %}
+                    {% include "comment/comment_list.html" %}
+                </div>
+            </div>
+        </div>
+        <div class="w-3/12">
+
+        </div>
+    </div>
+{% endblock %}
+{% block footer_references %}
+    <script src="/static/js/comment/create_and_load_comment.js"></script>
+{% endblock %}
