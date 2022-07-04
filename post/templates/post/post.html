@@ -31,7 +31,7 @@
 
     <p>{{ post.caption }}</p>
     <span class="text-sm text-gray-400">{{ post.created_at|time_format }}</span>
-    <div class="flex gap-3 justify-between z-autos">
+    <div class="flex gap-3 justify-between z-autos flex-wrap">
 
         {% include "post/components/like_component.html" %}
 
