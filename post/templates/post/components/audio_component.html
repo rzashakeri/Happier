@@ -1,8 +1,8 @@
-<div class="music-player flex flex-col gap-4 w-full">
+<div class="music-player flex flex-col gap-4 w-full ">
     <p class="player-title text-xl font-bold ml-3">{{ post.audio.name }}
         - {{ post.audio.artist }}</p>
     <div class="player-body flex justify-between w-full">
-        <div id="waveform" class="audio-player flex gap-3  w-full "
+        <div id="waveform" class="audio-player flex gap-3  w-full"
              src="http://127.0.0.1:8000/media/{{ post.audio.file }}">
             <button id="playButton" class="playbackBtn self-center w-12 h-12">
                 <img
@@ -14,7 +14,7 @@
             </button>
         </div>
     </div>
-    <div class="controls flex justify-between">
+    <div class="controls flex justify-between w-full">
         <div class="volume flex gap-3 items-center ml-3">
             <img
                     id="volumeIcon"
