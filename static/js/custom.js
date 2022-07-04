@@ -3,13 +3,11 @@ window.addEventListener('load', function () {
         if (music_players != null) {
             music_players.forEach(music_player => {
                     const AudioPlayer = music_player.getElementsByClassName('audio-player').item(0);
-                    var CursorPlugin = window.WaveSurfer.cursor;
-                    var wavesurfer = WaveSurfer.create({
+                    const wavesurfer = WaveSurfer.create({
                         height: 75,
-                        maxCanvasWidth: 464,
                         backend: 'WebAudio',
                         barWidth: 3,
-                        pixelRatio: 1,
+                        fillParent: true,
                         barMinHeight: 1,
                         normalize: true,
                         responsive: true,
@@ -32,11 +30,17 @@ window.addEventListener('load', function () {
                             })
                         ]
 
-                    })
+                    });
+                    const WaveWidth = wavesurfer.drawer.getWidth();
+                    const WaveContainerWidth = AudioPlayer.offsetWidth;
+                    const PlayButtonWidth = 62;
+                    const Width = WaveContainerWidth - PlayButtonWidth;
+
+
                     const source = AudioPlayer.getAttribute('src');
                     wavesurfer.load(source);
                     let first_wave = AudioPlayer.getElementsByTagName('wave').item(0);
-                    first_wave.setAttribute('class', 'first-wave')
+                    first_wave.setAttribute('class', 'first-wave w-full');
 
                     // Play Button Action
                     const playbackBtn = AudioPlayer.getElementsByClassName('playbackBtn').item(0);
@@ -52,7 +56,7 @@ window.addEventListener('load', function () {
                         wavesurfer.on('finish', function () {
                             playButtonIcon.src = "/static/images/player/play.svg";
                         });
-                    })
+                    });
 
 
                     // volume Slider Action
@@ -102,6 +106,7 @@ window.addEventListener('load', function () {
                         }
                     }
                     volumeIcon.addEventListener("click", toggleMute)
+
                 }
             )
         }
@@ -146,8 +151,6 @@ window.addEventListener('load', function () {
             item.addEventListener('submit', function (event) {
                 event.preventDefault();
                 let PostId = item.querySelector("#like-post-id").value;
-                console.log(PostId)
-
                 $.ajax({
                     url: "/post/like/" + PostId + "/",
                     type: "POST",
@@ -163,16 +166,11 @@ window.addEventListener('load', function () {
                             $('#like-count').text(json.like_count);
                             let LikeCount = item.querySelector("#like-count");
                             LikeCount.textContent = json.like_count;
-
                             let LikeSvg = item.querySelector("#Like-svg");
                             LikeSvg.setAttribute("class", "h-6 w-6 unliked");
                             LikeSvg.setAttribute("stroke", "currentColor");
-
-
                         }
-
                     },
-
                     error: function (xhr, errmsg, err) {
                         $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
                             " <a href='#' class='close'>&times;</a></div>");
