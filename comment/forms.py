@@ -10,7 +10,7 @@ class CreateCommentModelForm(forms.ModelForm):
         widgets = {
             "text": forms.TextInput(
                 attrs={
-                    "class": "pt-2 pb-2 pl-3 w-full h-11 bg-slate-100 rounded-lg placeholder:text-slate-600 font-medium pr-20",
+                    "class": "px-3 py-3 w-full h-11 bg-base-200 rounded-lg placeholder:text-slate-600 font-medium",
                     "placeholder": "Write a comment",
                     "id": "comment-text",
                 }
