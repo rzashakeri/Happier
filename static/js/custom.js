@@ -40,7 +40,7 @@ window.addEventListener('load', function () {
                     const source = AudioPlayer.getAttribute('src');
                     wavesurfer.load(source);
                     let first_wave = AudioPlayer.getElementsByTagName('wave').item(0);
-                    first_wave.setAttribute('class', 'first-wave w-full');
+                    first_wave.setAttribute('class', 'first-wave');
 
                     // Play Button Action
                     const playbackBtn = AudioPlayer.getElementsByClassName('playbackBtn').item(0);

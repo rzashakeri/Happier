@@ -48,8 +48,12 @@ input[type="file"] {
 
 .first-wave {
     height: 70px !important;
-    width: 459px;
+    width: 90%;
     overflow: hidden !important;
+}
+
+@media screen and (max-width: 639px) {
+
 }
 
 .play-button-icon, .volume-icon {
