@@ -15,7 +15,6 @@
         </div>
         <div class="flex-none">
             <ul class="menu menu-horizontal">
-                <!-- Navbar menu content here -->
                 {% if request.user.is_authenticated %}
                     {% include 'components/header/create_post_component.html' %}
                 {% endif %}
