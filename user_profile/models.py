@@ -19,6 +19,9 @@ class Profile(models.Model):
     follows = models.ManyToManyField(
         "self", symmetrical=False, related_name="followed_by", blank=True
     )
+    follow_requests = models.ManyToManyField(
+        "self", symmetrical=False, related_name="follow_request_by", blank=True
+    )
     birthday = BirthdayField(blank=True, null=True)
     objects = BirthdayManager()
     profile_image = ConstrainedImageField(
@@ -37,6 +40,7 @@ class Profile(models.Model):
     )
     biography = models.CharField(max_length=200, null=True, blank=True)
     job = models.CharField(max_length=20, null=True, blank=True)
+    is_private = models.BooleanField()
 
     def __str__(self):
         return self.user.username
