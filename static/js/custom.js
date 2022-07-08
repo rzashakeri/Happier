@@ -182,7 +182,6 @@ window.addEventListener('load', function () {
     }
 })
 
-// like ajax
 
 $('#id_password1').hidePassword(true);
 $('#id_password').hidePassword(true);

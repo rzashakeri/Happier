@@ -73,6 +73,12 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="sm:col-span-1 w-60">
+                                        <label class="cursor-pointer label">
+                                            <span class="label-text">You Are Account is Private ?</span>
+                                            {{ profile_form.is_private }}
+                                        </label>
+                                    </div>
                                 </div>
                                 <div class="lg:col-span-1 flex sm:justify-center">
                                     <div class="mt-1 gap-3 flex flex-row items-center gap-y-3 self-start lg:flex-col">
@@ -98,6 +104,7 @@
                                     </div>
                                     {{ profile_form.profile_image.errors }}
                                 </div>
+
                             </div>
                         </div>
                         <div class="px-4 py-3 bg-base-100 text-right sm:px-6">
