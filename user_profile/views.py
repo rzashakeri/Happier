@@ -1,7 +1,9 @@
+import json
+
 from allauth.account.decorators import verified_email_required
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
 
 from user_profile.forms import EditPersonalInformationForm, EditProfileForm
@@ -19,24 +21,6 @@ def profile_view(request, username):
         # if user not found raise 404 error
         except ObjectDoesNotExist:
             raise Http404
-        # if request methods are POST
-        if request.method == "POST":
-            # get current user profile
-            current_user_profile = request.user.profile
-            # get request data
-            data = request.POST
-            # get request data with follow name
-            action = data.get("follow")
-            # if the value of follow is follow
-            if action == "follow":
-                # add profile to follows table
-                current_user_profile.follows.add(profile)
-            # if the value of follow is unfollow
-            elif action == "unfollow":
-                # remove profile from follows table
-                current_user_profile.follows.remove(profile)
-            # save user data
-            current_user_profile.save()
         # context data
         context = {"profile": profile, "profiles": profiles}
         return render(request, "user_profile/profile.html", context)
@@ -129,6 +113,48 @@ def delete_account_view(request):
         return render(request, "user_profile/delete_account.html")
     else:
         return redirect("account_login")
+
+
+def follow_request(request, username):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            try:
+                profile = Profile.objects.get(user__username__iexact=username)
+                current_user_profile = request.user.profile
+                if profile in current_user_profile.follows.all():
+                    current_user_profile.follows.remove(profile)
+                    response = {"status": "unfollow"}
+                    return HttpResponse(
+                        json.dumps(response), content_type="application/json"
+                    )
+                elif profile in current_user_profile.follow_requests.all():
+                    current_user_profile.follow_requests.remove(profile)
+                    response = {"status": "cancel_follow_request"}
+                    return HttpResponse(
+                        json.dumps(response), content_type="application/json"
+                    )
+                else:
+                    if profile.is_private:
+                        current_user_profile.follow_requests.add(profile)
+                        response = {"status": "send_follow_request"}
+                        return HttpResponse(
+                            json.dumps(response), content_type="application/json"
+                        )
+                    else:
+                        current_user_profile.follows.add(profile)
+                        response = {"status": "followed"}
+                        return HttpResponse(
+                            json.dumps(response), content_type="application/json"
+                        )
+            except ObjectDoesNotExist:
+                response = {"status": "not_found"}
+                return HttpResponse(
+                    json.dumps(response), content_type="application/json"
+                )
+
+
+def answer_follow_request(request):
+    pass
 
 
 def followers(request, username):
