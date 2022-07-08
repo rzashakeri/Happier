@@ -113,13 +113,13 @@ class CustomChangePasswordForm(ChangePasswordForm):
         super().__init__(*args, **kwargs)
         self.fields["oldpassword"].widget.attrs[
             "class"
-        ] = "input input-bordered w-full max-w-xs my-3"
+        ] = "input input-bordered w-full my-3"
         self.fields["password1"].widget.attrs[
             "class"
-        ] = "input input-bordered w-full max-w-xs my-3"
+        ] = "input input-bordered w-full my-3"
         self.fields["password2"].widget.attrs[
             "class"
-        ] = "input input-bordered w-full max-w-xs my-3"
+        ] = "input input-bordered w-full my-3"
 
 
 class CustomSetPasswordForm(SetPasswordForm):
