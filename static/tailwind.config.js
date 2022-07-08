@@ -1,11 +1,12 @@
 module.exports = {
     content: [
-        '../templates/**/*.{html,js}',
-        '../feed/**/*.{html,js}',
-        '../comment/**/*.{html,js}',
-        '../home/**/*.{html,js}',
-        '../user_profile/**/*.{html,js}',
-        '../post/**/*.{html,js}',
+        '../templates/**/*.{html,js,py}',
+        '../feed/**/*.{html,js,py}',
+        '../comment/**/*.{html,js,py}',
+        '../home/**/*.{html,js,py}',
+        '../user_profile/**/*.{html,js,py}',
+        '../post/**/*.{html,js, py}',
+        '../user_management/**/*.{html,js,py}',
         '../venv/Lib/site-packages/crispy_tailwind/templates/**/*.{html,js}',
     ],
     darkMode: 'data-theme',
