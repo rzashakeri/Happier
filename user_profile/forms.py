@@ -66,7 +66,7 @@ class EditProfileForm(forms.ModelForm):
     class Meta:
         year = datetime.date.today().year
         model = Profile
-        fields = ["profile_image", "birthday", "biography", "job"]
+        fields = ["profile_image", "birthday", "biography", "job", "is_private"]
         widgets = {
             "biography": forms.Textarea(
                 attrs={
@@ -84,4 +84,5 @@ class EditProfileForm(forms.ModelForm):
                     "placeholder": "Job",
                 }
             ),
+            "is_private": forms.CheckboxInput(attrs={"class": "toggle toggle-accent"}),
         }
