@@ -184,5 +184,7 @@ window.addEventListener('load', function () {
 
 
 $('#id_password1').hidePassword(true);
+$('#id_password2').hidePassword(true);
 $('#id_password').hidePassword(true);
+$('#id_oldpassword').hidePassword(true);
 
