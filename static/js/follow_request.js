@@ -12,8 +12,12 @@ window.addEventListener('load', function () {
                 if (response.status === "followed") {
                     FollowUnfollowButton.textContent = "unFollow"
                 } else if (response.status === "unfollow" || response.status === "cancel_follow_request") {
+                    FollowUnfollowButton.classList.remove("btn-ghost")
+                    FollowUnfollowButton.classList.add("btn-info")
                     FollowUnfollowButton.textContent = "Follow"
                 } else if (response.status === "send_follow_request") {
+                    FollowUnfollowButton.classList.remove("btn-info")
+                    FollowUnfollowButton.classList.add("btn-ghost")
                     FollowUnfollowButton.textContent = "Requested"
                 }
             },
