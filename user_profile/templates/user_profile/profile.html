@@ -21,12 +21,25 @@
                         </div>
                     </div>
                     <div class="flex flex-col gap-y-[1rem] w-9/12">
-                        {% if profile.user.get_full_name %}
-                            <h1 class="text-3xl md:text-4xl font-semibold">{{ profile.user.get_full_name|capfirst }}</h1>
-                        {% else %}
-                            <h1 class="text-3xl md:text-4xl font-semibold">{{ profile.user.username|capfirst }}</h1>
-                        {% endif %}
-                        <p class="text-lg flex gap-x-0.5">
+                        <div class="flex gap-4">
+                            {% if profile.user.get_full_name %}
+                                <h1 class="text-3xl md:text-4xl font-semibold">{{ profile.user.get_full_name|capfirst }}</h1>
+                            {% else %}
+                                <h1 class="text-3xl md:text-4xl font-semibold">{{ profile.user.username|capfirst }}</h1>
+                            {% endif %}
+                            {% if profile.is_private %}
+                                <div class="tooltip tooltip-bottom self-center" data-tip="private">
+                                    <svg xmlns="http://www.w3.org/2000/svg" data-tip="hello"
+                                         class="h-6 w-6" viewBox="0 0 20 20"
+                                         fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                              d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                                              clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <p id="Username" class="text-lg flex gap-x-0.5">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 self-center" fill="none"
                                  viewBox="0 0 24 24"
                                  stroke="currentColor" stroke-width="2">
@@ -43,11 +56,12 @@
                                     </a>
                                 </button>
                             {% else %}
-                                <form method="post">
+                                <form id="FollowRequestForm" method="post">
                                     {% csrf_token %}
                                     <div class="w-6/12 buttons has-addons flex gap-x-3">
                                         {% if profile in request.user.profile.follows.all %}
-                                            <button class="btn btn-sm btn-active btn-ghost capitalize px-6"
+                                            <button id="FollowUnfollowButton"
+                                                    class="btn btn-sm btn-active btn-ghost capitalize px-6"
                                                     name="follow"
                                                     value="unfollow">
                                                 Unfollow
@@ -56,16 +70,27 @@
                                                     name="message">
                                                 message
                                             </button>
+                                        {% elif profile in request.user.profile.follow_requests.all %}
+                                            <button id="FollowUnfollowButton"
+                                                    class="btn btn-sm btn-info capitalize px-6"
+                                                    name="follow"
+                                                    value="requested">
+                                                requested
+                                            </button>
+                                            <button class="btn btn-sm btn-success capitalize px-6" name="message">
+                                                message
+                                            </button>
                                         {% else %}
-                                            <button class="btn btn-sm btn-info capitalize px-6" name="follow"
+                                            <button id="FollowUnfollowButton"
+                                                    class="btn btn-sm btn-info capitalize px-6"
+                                                    name="follow"
                                                     value="follow">
-                                                Follow
+                                                follow
                                             </button>
                                             <button class="btn btn-sm btn-success capitalize px-6" name="message">
                                                 message
                                             </button>
                                         {% endif %}
-
                                     </div>
 
                                 </form>
@@ -142,4 +167,7 @@
 
         </div>
     </section>
+{% endblock %}
+{% block footer_references %}
+    <script src="/static/js/follow_request.js"></script>
 {% endblock %}
