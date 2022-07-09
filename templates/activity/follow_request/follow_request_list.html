@@ -1,0 +1,3 @@
+{% for follow_request in request.user.profile.follow_request_by.all %}
+    {% include "activity/follow_request/components/follow_request_component.html" %}
+{% endfor %}
