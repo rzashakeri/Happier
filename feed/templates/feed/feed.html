@@ -31,10 +31,10 @@
     {% endif %}
     <div class="flex md:justify-evenly">
         <div class="max-lg:hidden lg:w-4/12 xl:w-3/12 xl:px-3 my-5">
-            {% include 'feed/components/profile_summary_component.html' %}
+            {% include 'user_profile/profile_summary/profile_summary_layout.html' %}
             <div class="divider"></div>
             <div class="sticky top-20">
-                {% include 'feed/components/menu_component.html' %}
+                {% include 'menu/menu_layout.html' %}
                 <div class="divider"></div>
                 {% include "feed/components/contact_component.html" %}
             </div>
@@ -44,7 +44,7 @@
             {% include 'feed/components/feed_posts.html' %}
         </div>
         <div class="max-xl:hidden xl:w-3/12 xl:px-3 my-5">
-            {% include 'feed/components/follow_requests.html' %}
+            {% include "activity/follow_request/follow_request_section.html" %}
             {% include 'feed/components/suggested_follower.html' %}
         </div>
     </div>
