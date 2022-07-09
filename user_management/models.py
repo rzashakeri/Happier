@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -11,6 +12,10 @@ class User(AbstractUser):
         if self.get_full_name() != "":
             return self.get_full_name()
         return self.username
+
+    def clean(self):
+        if len(self.username) < 4:
+            raise forms.ValidationError("Username must be at least 4 characters")
 
     # metadata about user in admin
     class Meta:
