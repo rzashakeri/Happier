@@ -14,13 +14,12 @@
             <a href="{% url 'home' %}">Happier</a>
         </div>
         <div class="flex-none">
-            <ul class="menu menu-horizontal">
+            <ul class="menu menu-horizontal items-center">
                 {% if request.user.is_authenticated %}
                     {% include 'components/header/create_post_component.html' %}
                 {% endif %}
                 {% include 'components/header/themes_component.html' %}
                 {% include 'components/header/notification_component.html' %}
-
                 {% include 'components/header/profile_component.html' %}
             </ul>
         </div>
