@@ -32,8 +32,11 @@
     {% if request.user.is_authenticated %}
         <ul
                 tabindex="0"
-                class="mt-3 p-2 shadow menu menu-compact dropdown-content rounded-box w-52 bg-base-100"
+                class="p-2 mt-2 border-base-300 border-[1px] shadow menu menu-compact dropdown-content rounded-box w-52 bg-base-100"
         >
+            <div class="ml-52 -mb-[1px] inline-block ">
+                <div class="h-3 w-3 -z-[100] border-base-300 absolute left-[11rem] -top-3 origin-bottom-left rotate-45 transform border-t-[1px] border-l-[1px] bg-base-100"></div>
+            </div>
             <li class="w-full">
                 <a href="{% url 'profile' user.username %}" class="justify-between w-full">
                     hi {{ request.user|capfirst }} </a>
@@ -51,5 +54,4 @@
             <li><a href="{% url 'account_signup' %}" class="w-full">Sign up</a></li>
         </ul>
     {% endif %}
-
 </div>
