@@ -153,8 +153,59 @@ def follow_request(request, username):
                 )
 
 
-def answer_follow_request(request):
-    pass
+def follow_request_accepted(request, username):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            try:
+                profile = Profile.objects.get(user__username__iexact=username)
+                current_user_profile = request.user.profile
+
+                profile.follow_requests.remove(current_user_profile)
+                profile.follows.add(current_user_profile)
+                profile.save()
+
+                response = {"status": "ok"}
+                return HttpResponse(
+                    json.dumps(response), content_type="application/json"
+                )
+            except ObjectDoesNotExist:
+                response = ""
+                return HttpResponse(response)
+        response = ""
+        return HttpResponse(response)
+    else:
+        return redirect("account_login")
+
+
+def follow_request_declined(request, username):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            try:
+                profile = Profile.objects.get(user__username__iexact=username)
+                current_user_profile = request.user.profile
+                current_user_profile.follow_requests.remove(profile)
+                current_user_profile.save()
+                response = {"status": "ok"}
+                return HttpResponse(
+                    json.dumps(response), content_type="application/json"
+                )
+            except ObjectDoesNotExist:
+                response = ""
+                return HttpResponse(response)
+        response = ""
+        return HttpResponse(response)
+    else:
+        return redirect("account_login")
+
+
+def follow_request_list(request):
+    if request.user.is_authenticated:
+        current_user = request.user.profile
+        follow_requests = current_user.follow_request_by.all()
+        context = {"follow_requests": follow_requests}
+        return render(
+            request, "activity/follow_request/follow_request_layout.html", context
+        )
 
 
 def followers(request, username):
