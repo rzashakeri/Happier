@@ -8,22 +8,40 @@ from .views import (
     followers,
     following,
     follow_request,
+    follow_request_accepted,
+    follow_request_declined,
+    follow_request_list,
 )
 
 urlpatterns = [
     path("<str:username>/", profile_view, name="profile"),
-    path("accounts/edit/profile", edit_profile_view, name="edit_profile"),
+    path("account/edit/profile", edit_profile_view, name="edit_profile"),
     path(
-        "accounts/edit/personal-information",
+        "account/edit/personal-information",
         edit_personal_information,
         name="edit_personal_information",
     ),
-    path("accounts/delete", delete_account_view, name="delete_account"),
+    path("account/delete", delete_account_view, name="delete_account"),
     path("<str:username>/followers", followers, name="followers"),
     path("<str:username>/following", following, name="following"),
     path(
         "follow/request/<str:username>/",
         follow_request,
         name="follow_request",
+    ),
+    path(
+        "follow/request/<str:username>/accepted",
+        follow_request_accepted,
+        name="follow_request_accepted",
+    ),
+    path(
+        "follow/request/<str:username>/declined",
+        follow_request_declined,
+        name="follow_request_declined",
+    ),
+    path(
+        "account/follow/requests/",
+        follow_request_list,
+        name="follow_request_list",
     ),
 ]
