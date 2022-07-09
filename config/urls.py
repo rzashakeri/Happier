@@ -25,9 +25,9 @@ urlpatterns = [  # django admin
     path("", include("feed.urls")),
     path("", include("home.urls")),
     # user_management app
-    path("accounts/", include("allauth.urls")),
-    path("accounts/", include("allauth_2fa.urls")),
-    path("accounts/", include("allauth.urls")),
+    path("account/", include("allauth.urls")),
+    path("account/", include("allauth_2fa.urls")),
+    path("account/", include("allauth.urls")),
     # user profile app
     path("", include("user_profile.urls")),
     path("post/", include("post.urls")),
