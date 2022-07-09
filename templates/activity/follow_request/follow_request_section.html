@@ -1,0 +1,17 @@
+{% load thumbnail %}
+{% if request.user.profile.is_private %}
+    {% if request.user.profile.follow_request_by.all %}
+        <section class="flex flex-col gap-3">
+            <div class="flex flex-col">
+                <div class="flex justify-between">
+                    <h1 class="text-xl font-semibold">Requests</h1>
+                    <a href="{% url "follow_request_list" %}" class="link link-hover">Show All</a>
+                </div>
+                {% include "activity/follow_request/follow_request_list.html" %}
+            </div>
+        </section>
+        <div class="divider"></div>
+
+    {% endif %}
+{% endif %}
+
