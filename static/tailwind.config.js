@@ -13,6 +13,9 @@ module.exports = {
     theme: {
         extend: {},
         screens: {
+            '2sm': '481px',
+            // => @media (min-width: 481px) { ... }
+
             'sm': '640px',
             // => @media (min-width: 640px) { ... }
 
@@ -41,6 +44,9 @@ module.exports = {
 
             'max-sm': {'max': '639px'},
             // => @media (max-width: 639px) { ... }
+
+            'max-2sm': {'max': '480px'},
+            // => @media (max-width: 480px) { ... }
         }
     },
     plugins: [require("daisyui"), require('@tailwindcss/line-clamp')],
