@@ -17,7 +17,7 @@ window.addEventListener('load', function () {
                     FollowUnfollowButton.textContent = "Follow"
                 } else if (response.status === "send_follow_request") {
                     FollowUnfollowButton.classList.remove("btn-info")
-                    FollowUnfollowButton.classList.add("btn-ghost")
+                    FollowUnfollowButton.classList.add("btn-ghost", "btn-active")
                     FollowUnfollowButton.textContent = "Requested"
                 }
             },
