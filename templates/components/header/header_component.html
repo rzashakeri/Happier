@@ -14,7 +14,7 @@
             <a href="{% url 'home' %}">Happier</a>
         </div>
         <div class="flex-none">
-            <ul class="menu menu-horizontal items-center">
+            <ul class="menu menu-horizontal items-center gap-2">
                 {% if request.user.is_authenticated %}
                     {% include 'components/header/create_post_component.html' %}
                 {% endif %}
