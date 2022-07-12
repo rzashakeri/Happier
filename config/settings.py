@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     "django_otp.plugins.otp_static",
     # Enable two-factor auth.
     "allauth_2fa",
+    "debug_toolbar",
     # Local
     "user_management",
     "user_profile",
@@ -73,6 +74,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "user_sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -161,7 +163,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # custom user model
 AUTH_USER_MODEL = "user_management.User"
-
 # django-allauth config
 LOGIN_REDIRECT_URL = "feed"
 LOGOUT_REDIRECT_URL = "home"
@@ -235,3 +236,7 @@ RECAPTCHA_USE_SSL = True
 
 # django user sessions
 SESSION_ENGINE = "user_sessions.backends.db"
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
