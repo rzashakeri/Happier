@@ -15,13 +15,13 @@ from .views import (
 
 urlpatterns = [
     path("<str:username>/", profile_view, name="profile"),
-    path("account/edit/profile", edit_profile_view, name="edit_profile"),
+    path("accounts/edit/profile", edit_profile_view, name="edit_profile"),
     path(
-        "account/edit/personal-information",
+        "accounts/edit/personal-information",
         edit_personal_information,
         name="edit_personal_information",
     ),
-    path("account/delete", delete_account_view, name="delete_account"),
+    path("accounts/delete", delete_account_view, name="delete_account"),
     path("<str:username>/followers", followers, name="followers"),
     path("<str:username>/following", following, name="following"),
     path(

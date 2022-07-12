@@ -25,12 +25,13 @@ urlpatterns = [  # django admin
     path("", include("feed.urls")),
     path("", include("home.urls")),
     # user_management app
-    path("account/", include("allauth.urls")),
-    path("account/", include("allauth_2fa.urls")),
-    path("account/", include("allauth.urls")),
+    path("accounts/", include("allauth.urls")),
+    path("accounts/", include("allauth_2fa.urls")),
+    path("accounts/", include("allauth.urls")),
     # user profile app
     path("", include("user_profile.urls")),
     path("post/", include("post.urls")),
     path("comment/", include("comment.urls")),
+    path("__debug__/", include("debug_toolbar.urls")),
     re_path(r"", include("user_sessions.urls", "user_sessions")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
