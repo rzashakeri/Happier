@@ -64,8 +64,7 @@ INSTALLED_APPS = [
     "allauth_2fa",
     "debug_toolbar",
     # Local
-    "user_management",
-    "user_profile",
+    "user",
     "templatetag",
     "feed",
     "home",
@@ -162,7 +161,7 @@ MEDIA_URL = "media/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # custom user model
-AUTH_USER_MODEL = "user_management.User"
+AUTH_USER_MODEL = "user.User"
 # django-allauth config
 LOGIN_REDIRECT_URL = "feed"
 LOGOUT_REDIRECT_URL = "home"
@@ -190,14 +189,14 @@ ACCOUNT_ADAPTER = "allauth_2fa.adapter.OTPAdapter"
 
 # custom form added
 ACCOUNT_FORMS = {
-    "login": "user_management.forms.CustomSigninForm",
-    "add_email": "user_management.forms.CustomAddEmailForm",
-    "change_password": "user_management.forms.CustomChangePasswordForm",
-    "set_password": "user_management.forms.CustomSetPasswordForm",
-    "reset_password": "user_management.forms.CustomResetPasswordForm",
-    "reset_password_from_key": "user_management.forms.CustomResetPasswordFromKeyForm",
+    "login": "user.forms.CustomSigninForm",
+    "add_email": "user.forms.CustomAddEmailForm",
+    "change_password": "user.forms.CustomChangePasswordForm",
+    "set_password": "user.forms.CustomSetPasswordForm",
+    "reset_password": "user.forms.CustomResetPasswordForm",
+    "reset_password_from_key": "user.forms.CustomResetPasswordFromKeyForm",
     "disconnect": "allauth.socialaccount.forms.DisconnectForm",
-    "signup": "user_management.forms.CustomSignupForm",
+    "signup": "user.forms.CustomSignupForm",
 }
 
 ACCOUNT_SESSION_REMEMBER = True
