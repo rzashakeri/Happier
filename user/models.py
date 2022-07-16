@@ -1,17 +1,32 @@
-import uuid
-
 from birthday import BirthdayField, BirthdayManager
 from constrainedfilefield.fields import ConstrainedImageField
+from django import forms
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
+from phonenumber_field.modelfields import PhoneNumberField
 
-from user_management.models import User
+from utility.generator import user_directory_path
 
 
-def user_directory_path(instance, filename):
-    filename, extension = filename.split(".")
-    if extension in ["png", "jpeg", "heic", "heif", "jpg"]:
-        return "profile/image/{0}.{1}".format(str(uuid.uuid4().hex), extension)
+# custom user model
+class User(AbstractUser):
+    phone_number = PhoneNumberField(blank=True)
+
+    # show user data in admin when UserAdmin class in admin not set
+    def __str__(self):
+        if self.get_full_name() != "":
+            return self.get_full_name()
+        return self.username
+
+    def clean(self):
+        if len(self.username) < 4:
+            raise forms.ValidationError("Username must be at least 4 characters")
+
+    # metadata about user in admin
+    class Meta:
+        verbose_name = "user"
+        verbose_name_plural = "users"
 
 
 class Profile(models.Model):
