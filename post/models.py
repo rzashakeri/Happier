@@ -7,7 +7,7 @@ from django.db import models
 from django.urls import reverse
 from tbm_utils import humanize_filesize
 
-from user_management.models import User
+from user.models import User
 from utility.generator import hex_uuid, user_directory_path
 
 
@@ -29,6 +29,27 @@ class Post(models.Model):
             "show_post",
             kwargs={"slug": self.slug},
         )
+
+
+class PostLike(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    post = models.ForeignKey("Post", on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.user} liked Your Post"
+
+
+class PostCategory(models.Model):
+    title = models.CharField(max_length=30)
+    url_title = models.SlugField(max_length=30)
+
+    class Meta:
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
+
+    def __str__(self):
+        return self.title
 
 
 class Image(models.Model):
@@ -55,7 +76,7 @@ class Audio(models.Model):
     artist = models.CharField(max_length=100, null=True, blank=True)
     album = models.CharField(max_length=100, null=True, blank=True)
     size = models.CharField(max_length=30, null=True, blank=True)
-    data = models.CharField(max_length=30, null=True, blank=True)
+    date = models.CharField(max_length=30, null=True, blank=True)
     duration = models.CharField(max_length=100, null=True, blank=True)
 
     def save(self, *args, **kwargs):
@@ -87,8 +108,8 @@ class Audio(models.Model):
             pass
 
         try:
-            data = metadata.tags.data[0]
-            self.data = data
+            date = metadata.tags.date[0]
+            self.date = date
         except AttributeError:
             pass
 
@@ -102,24 +123,3 @@ class Audio(models.Model):
 
     def __str__(self):
         return str(self.name)
-
-
-class PostLike(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    post = models.ForeignKey("Post", on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.user} liked Your Post"
-
-
-class PostCategory(models.Model):
-    title = models.CharField(max_length=30)
-    url_title = models.SlugField(max_length=30)
-
-    class Meta:
-        verbose_name = "Category"
-        verbose_name_plural = "Categories"
-
-    def __str__(self):
-        return self.title

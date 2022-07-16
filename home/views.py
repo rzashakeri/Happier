@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 
 # from post.forms import UploadPostAttachmentForm, UploadPostForm
-from user_management.forms import CustomSigninForm
-from user_management.models import User
+from user.forms import CustomSigninForm
+from user.models import User
 
 
 def home(request):
