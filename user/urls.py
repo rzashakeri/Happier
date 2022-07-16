@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import (
+from user.views import (
     profile_view,
     edit_profile_view,
     delete_account_view,
