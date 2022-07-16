@@ -1,8 +1,8 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from user_management.models import User
-from user_profile.models import Profile
+from user.models import User
+from .models import Profile
 
 
 @receiver(post_save, sender=User)
