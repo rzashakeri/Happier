@@ -6,8 +6,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
 
-from user_profile.forms import EditPersonalInformationForm, EditProfileForm
-from user_profile.models import Profile
+from .forms import EditPersonalInformationForm, EditProfileForm
+from .models import Profile
 
 
 @verified_email_required
