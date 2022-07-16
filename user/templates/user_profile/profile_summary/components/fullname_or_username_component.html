@@ -1,0 +1,7 @@
+<a href="{% url 'profile' request.user.username %}">
+    {% if request.user.get_full_name %}
+        <h1 class="text-xl font-semibold capitalize text-base-content">{{ request.user.get_full_name }}</h1>
+    {% else %}
+        <h1 class="text-xl font-semibold capitalize">{{ request.user.username }}</h1>
+    {% endif %}
+</a>

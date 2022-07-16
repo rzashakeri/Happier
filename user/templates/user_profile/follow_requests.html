@@ -1,0 +1,53 @@
+{% extends "shared/base.html" %}
+{% load thumbnail %}
+{% block title %}
+    follow requests
+{% endblock %}
+{% block content %}
+    {% for follow_request in follow_requests %}
+        <div class="flex flex-col gap-3 mt-5">
+            <div class="flex  flex-co gap-5">
+                <div class="avatar">
+                    <div class="rounded-full w-16 h-16">
+                        {% if follow_request.profile_image %}
+                            {% thumbnail follow_request.profile_image "55x55" crop="center" quality=100 as profile_image %}
+                                <img src="{{ profile_image.url }}" alt="">
+                            {% endthumbnail %}
+                        {% else %}
+                            <img alt="user profile image" src="/static/images/avatar.png"/>
+                        {% endif %}
+
+                    </div>
+                </div>
+                <div>
+                    <p><span class="font-semibold">{{ follow_request.user.username }}</span> Wants To Add
+                        You To
+                        Friend</p>
+                    <div class="flex gap-5">
+                        <form method="POST"
+                              action="{% url "follow_request_accepted" username=follow_request.user.username %}">
+                            {% csrf_token %}
+                            <button name="answer_follow_request"
+                                    value="accept"
+                                    class="link link-hover text-info">
+                                Accept
+                            </button>
+                        </form>
+                        <form method="POST"
+                              action="{% url "follow_request_declined" username=follow_request.user.username %}">                                        {% csrf_token %}
+                            {% csrf_token %}
+                            <button name="answer_follow_request"
+                                    value="decline"
+                                    class="link link-hover text-zinc-400">
+                                Decline
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    {% endfor %}
+
+{% endblock %}

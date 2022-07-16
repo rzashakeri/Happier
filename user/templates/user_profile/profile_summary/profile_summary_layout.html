@@ -1,0 +1,37 @@
+{% load custom_template_tag %}
+{% load thumbnail %}
+<section class="flex flex-col gap-3 items-center justify-center rounded-lg">
+    <div class="avatar">
+        <div class="rounded-full w-36">
+            {% if request.user.profile.profile_image %}
+                {% thumbnail request.user.profile.profile_image "144x144" crop="center" quality=100 as profile_image %}
+                    <img src="{{ profile_image.url }}" alt="">
+                {% endthumbnail %}
+            {% else %}
+                <img alt="user profile image" src="/static/images/avatar.png"/>
+            {% endif %}
+        </div>
+    </div>
+    <div class="flex flex-col gap-4 w-full">
+        <div class="flex flex-col justify-center items-center">
+            {% include "user_profile/profile_summary/components/fullname_or_username_component.html" %}
+            {% if request.user.profile.job %}
+                <span class="text-base-content capitalize">{{ request.user.profile.job }}</span>
+            {% endif %}
+        </div>
+        <div class="flex justify-center gap-9 justify-evenly">
+            <div class="flex flex-col items-center justify-center">
+                <h1 class="text-2xl font-bold">{{ request.user.post_set.count }}</h1>
+                <p>Posts</p>
+            </div>
+            <div class="flex flex-col items-center justify-center">
+                <h1 class="text-2xl font-bold">{{ request.user.profile.followed_by.count|minus }}</h1>
+                <p>Follower</p>
+            </div>
+            <div class="flex flex-col items-center justify-center">
+                <h1 class="text-2xl font-bold">{{ request.user.profile.follows.count|minus }}</h1>
+                <p>Following</p>
+            </div>
+        </div>
+    </div>
+</section>
