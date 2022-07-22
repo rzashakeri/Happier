@@ -1,5 +1,6 @@
 {% extends 'shared/base.html' %}
 {% load thumbnail %}
+{% load render_partial %}
 {% load custom_template_tag %}
 {% block title %}
     {{ profile.user.username }}
@@ -11,7 +12,7 @@
                 <div class="flex gap-x-[2rem]">
                     <div class="avatar flex justify-center">
                         <div class="rounded-full h-20 w-20 sm:w-36 sm:h-36">
-                            {% if profile.user.profile.profile_image %}
+                            {% if profile.profile_image %}
                                 {% thumbnail profile.profile_image '150x150' crop=center quality=100 as img %}
                                     <img alt="user profile image" src="{{ img.url }}"/>
                                 {% endthumbnail %}
@@ -22,10 +23,10 @@
                     </div>
                     <div class="flex flex-col gap-y-[1rem] w-9/12">
                         <div class="flex gap-4">
-                            {% if profile.user.get_full_name %}
-                                <h1 class="text-3xl md:text-4xl font-semibold">{{ profile.user.get_full_name|capfirst }}</h1>
+                            {% if user.get_full_name %}
+                                <h1 class="text-3xl md:text-4xl font-semibold">{{ user.get_full_name|capfirst }}</h1>
                             {% else %}
-                                <h1 class="text-3xl md:text-4xl font-semibold">{{ profile.user.username|capfirst }}</h1>
+                                <h1 class="text-3xl md:text-4xl font-semibold">{{ user.username|capfirst }}</h1>
                             {% endif %}
                             {% if profile.is_private %}
                                 <div class="tooltip tooltip-bottom self-center" data-tip="private">
@@ -46,10 +47,10 @@
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                       d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
                             </svg>
-                            {{ profile.user.username }}
+                            {{ user.username }}
                         </p>
                         <div class="flex justify-start">
-                            {% if profile.user.username == request.user.username %}
+                            {% if user.username == request.user.username %}
                                 <button class="btn btn-sm btn-active btn-ghost px-[23px] hover:bg-base-300 capitalize">
                                     <a href="{% url 'edit_profile' %}">
                                         Edit Profile
@@ -59,7 +60,7 @@
                                 <form id="FollowRequestForm" method="post">
                                     {% csrf_token %}
                                     <div class="w-6/12 buttons has-addons flex gap-x-3">
-                                        {% if profile in request.user.profile.follows.all %}
+                                        {% if request.user in followers %}
                                             <button id="FollowUnfollowButton"
                                                     class="btn btn-sm btn-active btn-ghost capitalize px-6"
                                                     name="follow"
@@ -106,22 +107,35 @@
                 {% endif %}
 
                 <div class="stats bg-base-200 text-primary-content mt-2">
-                    <a href="{% url 'followers' profile.user.username %}">
-                        <div class="stat">
-                            <div class="stat-title text-base-content">Followers</div>
-                            <div class="stat-value text-base-content">{{ profile.followed_by.count|minus }}</div>
-                        </div>
-                    </a>
+
                     <div class="stat">
-                        <div class="stat-title text-base-content">Following</div>
-                        <div class="stat-value text-base-content">
-                            {% if profile.follows.count == 0 %}
+                        <label for="Followers" class="stat-title text-base-content cursor-pointer">Followers</label>
+                        <input type="checkbox" id="Followers" class="modal-toggle"/>
+                        <label for="Followers" class="modal cursor-pointer">
+                            <label class="modal-box relative" for="">
+                                {% render_partial "user.views.followers_list" username=user.username %}
+                            </label>
+                        </label>
+                        <label for="Followers" class="stat-value text-base-content  cursor-pointer">{{ followers|length|minus }}</label>
+                    </div>
+
+                    <div class="stat">
+                    <label for="Following" class="stat-title text-base-content cursor-pointer">Following</label>
+                        <input type="checkbox" id="Following" class="modal-toggle"/>
+                        <label for="Following" class="modal cursor-pointer">
+                            <label class="modal-box relative  max-h-96 overflow-y-auto" for="">
+                                {% render_partial "user.views.followings_list" username=user.username %}
+                            </label>
+                        </label>
+                        <label for="Following" class="stat-value text-base-content">
+                            {% if following == 0 %}
                                 0
                             {% else %}
-                                {{ profile.follows.count|minus }}
+                                {{ following|length|minus }}
                             {% endif %}
-                        </div>
+                        </label>
                     </div>
+
                     <div class="stat">
                         <div class="stat-title text-base-content">Post</div>
                         <div class="stat-value text-base-content">
