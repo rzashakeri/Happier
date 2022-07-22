@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 from pathlib import Path
-
 import environ
 from django.utils.translation import gettext_lazy as _
 
@@ -63,6 +62,7 @@ INSTALLED_APPS = [
     # Enable two-factor auth.
     "allauth_2fa",
     "debug_toolbar",
+    "actstream",
     # Local
     "user",
     "templatetag",
@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     "home",
     "post",
     "comment",
+    "activity",
 ]
 
 MIDDLEWARE = [
@@ -82,7 +83,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_otp.middleware.OTPMiddleware",
-    "allauth_2fa.middleware.TwoFactorMiddleware",
+    "allauth_2fa.middleware.AllauthTwoFactorMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -207,6 +208,7 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = "home"
 ACCOUNT_SIGNUP_PASSWORD_VERIFICATION = False
+ACCOUNT_USERNAME_MIN_LENGTH = 5
 
 # Email Setting
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -239,3 +241,14 @@ SESSION_ENGINE = "user_sessions.backends.db"
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+ACTSTREAM_SETTINGS = {
+    "MANAGER": "actstream.managers.ActionManager",
+    "FETCH_RELATIONS": True,
+    "USE_PREFETCH": True,
+    "USE_JSONFIELD": False,
+    "GFK_FETCH_DEPTH": 1,
+}
+
+FAKER_LOCALE = None
+FAKER_PROVIDERS = None
