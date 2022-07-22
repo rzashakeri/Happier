@@ -31,4 +31,5 @@ urlpatterns = [  # django admin
     path("comment/", include("comment.urls")),
     path("__debug__/", include("debug_toolbar.urls")),
     re_path(r"", include("user_sessions.urls", "user_sessions")),
+    re_path(r"^activity/", include("actstream.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
