@@ -25,11 +25,11 @@
                 <p>Posts</p>
             </div>
             <div class="flex flex-col items-center justify-center">
-                <h1 class="text-2xl font-bold">{{ request.user.profile.followed_by.count|minus }}</h1>
+                <h1 class="text-2xl font-bold">{{ request.user.followers|length }}</h1>
                 <p>Follower</p>
             </div>
             <div class="flex flex-col items-center justify-center">
-                <h1 class="text-2xl font-bold">{{ request.user.profile.follows.count|minus }}</h1>
+                <h1 class="text-2xl font-bold">{{ request.user.profile.followings|length }}</h1>
                 <p>Following</p>
             </div>
         </div>
