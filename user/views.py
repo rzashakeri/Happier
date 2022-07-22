@@ -1,128 +1,122 @@
 import json
-
+from actstream.actions import follow, unfollow
+from actstream.models import following, followers
 from allauth.account.decorators import verified_email_required
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
-
+from actstream.actions import follow, unfollow
 from .forms import EditPersonalInformationForm, EditProfileForm
-from .models import Profile
+from .models import Profile, User
 
 
 @verified_email_required
 def profile_view(request, username):
-    # We check if the user is logged in?
-    if request.user.is_authenticated:
-        try:
-            profiles = Profile.objects.all()[:4]
-            # get user profile by username
-            profile = Profile.objects.get(user__username__iexact=username)
+    try:
+        profiles = Profile.objects.all()[:4]
+        # get user profile by username
+        profile = Profile.objects.get(user__username__iexact=username)
+        user = User.objects.get(username=username)
+        user_following = following(user)
+        user_followers = followers(user)
+        logged_in_user_following = following(request.user)
+        logged_in_user_followers = followers(request.user)
         # if user not found raise 404 error
-        except ObjectDoesNotExist:
-            raise Http404
-        # context data
-        context = {"profile": profile, "profiles": profiles}
-        return render(request, "user_profile/profile.html", context)
-
-    # if a user is not login in redirecting to login page
-    else:
-        return redirect("account_login")
+    except ObjectDoesNotExist:
+        raise Http404
+    # context data
+    context = {
+        "user": user,
+        "profile": profile,
+        "profiles": profiles,
+        "following": user_following,
+        "followers": user_followers,
+    }
+    return render(request, "user_profile/profile.html", context)
 
 
 @verified_email_required
 def edit_personal_information(request):
-    # checked user is authenticated
-    if request.user.is_authenticated:
-        # get the edit profile model form
-        profile_form = EditPersonalInformationForm(instance=request.user)
-        # check request is post?
-        if request.method == "POST":
-            # send user data to edit profile form
-            profile_form = EditPersonalInformationForm(
-                request.POST, instance=request.user
-            )
-            # check user profile form is valid
-            if profile_form.is_valid():
-                # if user profile is valid, save the form
-                profile_form.save()
-                # show success message when save user data
-                messages.success(request, "Profile saved")
-            # put edit profile form with context and send to template
-            context = {"profile_form": profile_form}
-            # render request and template and context
-            return render(
-                request, "user_profile/edit_personal_information.html", context
-            )
-            # pass context
+    profile_form = EditPersonalInformationForm(instance=request.user)
+    # checked request is post?
+    if request.method == "POST":
+        # send user data to edit profile form
+        profile_form = EditPersonalInformationForm(
+            request.POST, instance=request.user
+        )
+        # check user profile form is valid
+        if profile_form.is_valid():
+            # if user profile is valid, save the form
+            profile_form.save()
+            # show success message when save user data
+            messages.success(request, "Profile saved")
+        # put edit profile form with context and send to template
         context = {"profile_form": profile_form}
-        # return request and template and context
-        return render(request, "user_profile/edit_personal_information.html", context)
-    # if a user is not authenticated, redirect to login page
-    else:
-        return redirect(reversed("account_login"))
+        # render request and template and context
+        return render(
+            request, "user_profile/edit_personal_information.html", context
+        )
+        # pass context
+    context = {"profile_form": profile_form}
+    # return request and template and context
+    return render(request, "user_profile/edit_personal_information.html", context)
 
+
+# if a user is not authenticated, redirect to login page
 
 @verified_email_required
 def edit_profile_view(request):
-    # checked user is authenticated
-    if request.user.is_authenticated:
-        # get the edit profile model form
-        profile_form = EditProfileForm(instance=request.user.profile)
-        # check request is post?
-        if request.method == "POST":
-            # send user data to edit profile form
-            profile_form = EditProfileForm(
-                request.POST, request.FILES, instance=request.user.profile
-            )
-            # check user profile form is valid
-            if profile_form.is_valid():
-                # if user profile is valid, save the form
-                profile_form.save()
-                # show success message when save user data
-                messages.success(request, "Profile saved")
-            # put edit profile form with context and send to template
-            context = {"profile_form": profile_form}
-            # render request and template and context
-            return render(request, "user_profile/edit_profile.html", context)
-            # pass context
+    profile_form = EditProfileForm(instance=request.user.profile)
+    # check request is post?
+    if request.method == "POST":
+        # send user data to edit profile form
+        profile_form = EditProfileForm(
+            request.POST, request.FILES, instance=request.user.profile
+        )
+        # check user profile form is valid
+        if profile_form.is_valid():
+            # if user profile is valid, save the form
+            profile_form.save()
+            # show success message when save user data
+            messages.success(request, "Profile saved")
+        # put edit profile form with context and send to template
         context = {"profile_form": profile_form}
-        # return request and template and context
+        # render request and template and context
         return render(request, "user_profile/edit_profile.html", context)
-    # if a user is not authenticated, redirect to login page
-    else:
-        return redirect(reversed("account_login"))
+        # pass context
+    context = {"profile_form": profile_form}
+    # return request and template and context
+    return render(request, "user_profile/edit_profile.html", context)
 
 
 @verified_email_required
 def delete_account_view(request):
-    if request.user.is_authenticated:
-        if request.method == "POST":
-            data = request.POST.get("delete")
-            if data == "yes":
-                user = request.user
-                user.delete()
-                user.save()
-                messages.success(
-                    request,
-                    "Your account has been successfully deleted, We hope you will be back soon :)",
-                )
-                return redirect("home")
-            else:
-                return redirect("home")
-        return render(request, "user_profile/delete_account.html")
-    else:
-        return redirect("account_login")
+    if request.method == "POST":
+        data = request.POST.get("delete")
+        if data == "yes":
+            user = request.user
+            user.delete()
+            user.save()
+            messages.success(
+                request,
+                "Your account has been successfully deleted, We hope you will be back soon :)",
+            )
+            return redirect("home")
+        else:
+            return redirect("home")
+    return render(request, "user_profile/delete_account.html")
 
 
 def follow_request(request, username):
     if request.user.is_authenticated:
         if request.method == "POST":
             try:
-                profile = Profile.objects.get(user__username__iexact=username)
+                user = User.objects.get(username=username)
+                profile = Profile.objects.get(user=user)
                 current_user_profile = request.user.profile
-                if profile in current_user_profile.follows.all():
-                    current_user_profile.follows.remove(profile)
+                if request.user in followers(user):
+                    unfollow(request.user, user)
                     response = {"status": "unfollow"}
                     return HttpResponse(
                         json.dumps(response), content_type="application/json"
@@ -141,7 +135,7 @@ def follow_request(request, username):
                             json.dumps(response), content_type="application/json"
                         )
                     else:
-                        current_user_profile.follows.add(profile)
+                        follow(request.user, user)
                         response = {"status": "followed"}
                         return HttpResponse(
                             json.dumps(response), content_type="application/json"
@@ -157,13 +151,14 @@ def follow_request_accepted(request, username):
     if request.user.is_authenticated:
         if request.method == "POST":
             try:
-                profile = Profile.objects.get(user__username__iexact=username)
-                current_user_profile = request.user.profile
-
+                user = User.objects.get(username=username)  # We get the current user
+                profile = Profile.objects.get(
+                    user=user
+                )  # We get the current user profile
+                current_user_profile = request.user.profile  # We get the logged-in user
                 profile.follow_requests.remove(current_user_profile)
-                profile.follows.add(current_user_profile)
+                follow(user, request.user)
                 profile.save()
-
                 response = {"status": "ok"}
                 return HttpResponse(
                     json.dumps(response), content_type="application/json"
@@ -208,9 +203,15 @@ def follow_request_list(request):
         )
 
 
-def followers(request, username):
-    return render(request, "user_profile/followers.html")
+def followers_list(request, username):
+    user = User.objects.get(username=username)
+    user_followers = followers(user)
+    context = {"followers": user_followers}
+    return render(request, "user_profile/followers.html", context)
 
 
-def following(request, username):
-    return render(request, "user_profile/following.html")
+def followings_list(request, username):
+    user = User.objects.get(username=username)
+    user_following = following(user)
+    context = {"followings": user_following}
+    return render(request, "user_profile/following.html", context)
