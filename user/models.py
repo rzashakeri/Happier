@@ -19,10 +19,6 @@ class User(AbstractUser):
             return self.get_full_name()
         return self.username
 
-    def clean(self):
-        if len(self.username) < 4:
-            raise forms.ValidationError("Username must be at least 4 characters")
-
     # metadata about user in admin
     class Meta:
         verbose_name = "user"
@@ -31,9 +27,6 @@ class User(AbstractUser):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    follows = models.ManyToManyField(
-        "self", symmetrical=False, related_name="followed_by", blank=True
-    )
     follow_requests = models.ManyToManyField(
         "self", symmetrical=False, related_name="follow_request_by", blank=True
     )
