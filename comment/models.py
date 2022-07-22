@@ -13,6 +13,9 @@ class Comment(models.Model):
         "Comment", on_delete=models.CASCADE, null=True, blank=True
     )
 
+    def __str__(self):
+        return self.text
+
 
 class CommentLike(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
