@@ -6,7 +6,8 @@ register = template.Library()
 
 @register.filter
 def minus(value):
-    return value - 1
+    if value != "":
+        return int(value) - 1
 
 
 @register.filter
