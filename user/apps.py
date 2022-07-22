@@ -7,4 +7,7 @@ class UserConfig(AppConfig):
     verbose_name = "user"
 
     def ready(self):
+        from actstream import registry
+
+        registry.register(self.get_model("User"))
         import user.signals
