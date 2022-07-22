@@ -3,12 +3,13 @@
 {% load static %}
 <section>
     <h1 class="text-3xl font-bold mt-10 capitalize">Hi {{ request.user.get_full_name }} 🖐️</h1>
-    {% for follower in request.user.profile.follows.all %}
-        {% for post in follower.user.post_set.all %}
+    {% for following in followings %}
+        {% for post in following.post_set.all %}
             <div id="post" class="my-5 rounded-md shadow-md overflow-hidden">
                 {% render_partial "post.views.post_view" post_id=post.pk %}
                 {% render_partial "comment.views.create_comment" post_id=post.pk %}
             </div>
         {% endfor %}
     {% endfor %}
+
 </section>
