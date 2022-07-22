@@ -1,12 +1,30 @@
-{% extends 'shared/base.html' %}
-{% block title %}
-    followers
-{% endblock %}
-{% block content %}
-    <div class="flex justify-center">
-        <div class="tabs">
-            <a class="tab tab-bordered">Following </a>
-            <a class="tab tab-bordered tab-active">Followers</a>
+{% load thumbnail %}
+{% for follower in followers %}
+    {% if follower != request.user %}
+        <div class="flex items-center space-x-3 p-3 hover:bg-base-200 hover:rounded-md">
+            <div class="avatar">
+                <div class="mask mask-squircle w-12 h-12">
+                    {% if follower.profile.profile_image %}
+                        {% thumbnail follower.profile.profile_image '48x48' crop='center' quality=100 as image %}
+                            <img src="{{ image.url }}" alt="Avatar Tailwind CSS Component"/>
+                        {% endthumbnail %}
+                    {% else %}
+                        <img src="/static/images/avatar.png" alt="Avatar Tailwind CSS Component"/>
+                    {% endif %}
+                </div>
+            </div>
+            <div>
+                <div class="font-bold text-base-content">
+                    <a href="{% url 'profile' follower.profile.user.username %}">
+                        {{ follower.profile.user.username }}
+                    </a>
+                </div>
+            </div>
         </div>
-    </div>
-{% endblock %}
+    {% endif %}
+{% endfor %}
+
+
+
+
+
