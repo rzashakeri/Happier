@@ -1,4 +1,6 @@
 import pytest
+
+from user.forms import EditPersonalInformationForm
 from user.models import Profile
 from user.models import User
 from user.models import User, Profile
@@ -51,7 +53,7 @@ def path_of_test_files_directory():
 
 
 @pytest.fixture
-def edit_profile_image(path_of_test_files_directory):
+def profile_image(path_of_test_files_directory):
     uploaded_file = File(open(path_of_test_files_directory, "rb"))
     file_data = {
         "uploaded_file": SimpleUploadedFile(
@@ -70,7 +72,7 @@ def uploaded_file(path_of_test_files_directory):
 
 
 @pytest.fixture
-def edit_profile_data(uploaded_file):
+def profile_data(uploaded_file):
     user_birthday = datetime(2010, 1, 1).date()
     form_data = {
         "profile_image": uploaded_file,
@@ -80,3 +82,25 @@ def edit_profile_data(uploaded_file):
         "is_private": True,
     }
     return form_data
+
+
+@pytest.fixture
+def personal_information_data():
+    edit_personal_information_data = {
+        "first_name": "reza",
+        "last_name": "shakeri",
+        "username": "rzashakeri"
+    }
+
+    return edit_personal_information_data
+
+
+@pytest.fixture
+def bad_personal_information_data():
+    edit_personal_information_data = {
+        "first_name": "reza",
+        "last_name": "shakeri",
+        "username": "rza"
+    }
+
+    return edit_personal_information_data
