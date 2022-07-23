@@ -129,6 +129,7 @@ class EditPersonalInformationForm(forms.ModelForm):
                 attrs={
                     "class": "mt-1 input input-bordered w-full max-w-xs",
                     "placeholder": "Username",
+                    "minlength": "5"
                 }
             ),
             "biography": forms.Textarea(
