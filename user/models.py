@@ -24,6 +24,10 @@ class User(AbstractUser):
         verbose_name = "user"
         verbose_name_plural = "users"
 
+    def clean(self):
+        if len(self.username) < 4:
+            raise forms.ValidationError("Username must be at least 4 characters")
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
