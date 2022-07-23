@@ -5,11 +5,13 @@ from .fixtures import (
     user,
     user_without_full_name,
     uploaded_file,
-    edit_profile_data,
-    edit_profile_image,
+    profile_data,
+    profile_image,
     path_of_test_files_directory,
+    personal_information_data,
+    bad_personal_information_data
 )
-from ..forms import EditProfileForm
+from ..forms import EditProfileForm, EditPersonalInformationForm
 from django.core.files.uploadedfile import SimpleUploadedFile
 import os
 from django.core.files import File
@@ -61,23 +63,58 @@ class TestEditProfileView:
         assert '<div class="label-text mb-1">Biography</div>' in str(content)
 
     def test_edit_profile_form_is_valid(
-            self, user, edit_profile_image, edit_profile_data
+            self, user, profile_image, profile_data
     ):
         edit_profile_form = EditProfileForm(
-            data=edit_profile_data,
+            data=profile_data,
             instance=user.profile,
-            files=edit_profile_image,
+            files=profile_image,
         )
         assert edit_profile_form.is_valid()
 
-    def test_posted_edit_profile_form_data(self, user, edit_profile_data, client):
+    def test_posted_edit_profile_form_data(self, user, profile_data, client):
         client.force_login(user)
-        response = client.post(reverse("edit_profile"), edit_profile_data)
+        response = client.post(reverse("edit_profile"), profile_data)
         content = response.content.decode(response.charset)
         assert response.status_code == 200
-        assert response.resolver_match.url_name == 'edit_profile'
-        assert response.resolver_match.view_name == 'edit_profile'
-        assert response.request['PATH_INFO'] == reverse("edit_profile")
-        assert '<input type="text" name="job" value="Software Engineer" class="input input-bordered w-full mt-1" placeholder="Job" maxlength="20" id="id_job">' in str(content)
-        
+        assert response.resolver_match.url_name == "edit_profile"
+        assert response.resolver_match.view_name == "edit_profile"
+        assert response.request["PATH_INFO"] == reverse("edit_profile")
+        assert (
+                '<input type="text" name="job" value="Software Engineer" class="input input-bordered w-full mt-1" placeholder="Job" maxlength="20" id="id_job">'
+                in str(content)
+        )
 
+
+@pytest.mark.django_db
+class TestEditPersonalInformationView:
+    def test_dose_edit_personal_information_page_load_correctly(self, user, client):
+        response = client.get(reverse("edit_personal_information"))
+        assert response.status_code == 302  # redirect to login page
+        assert response.url == "/accounts/login/?next=" + reverse(
+            "edit_personal_information"
+        )
+        client.force_login(user)
+        response = client.get(reverse("edit_personal_information"))
+        assert response.status_code == 200
+        assert response.request["PATH_INFO"] == reverse("edit_personal_information")
+        assert response.resolver_match.url_name == "edit_personal_information"
+        assert response.resolver_match.view_name == "edit_personal_information"
+
+    def test_edit_personal_information_form_is_valid(
+            self, personal_information_data, user
+    ):
+        edit_personal_information_form = EditPersonalInformationForm(
+            data=personal_information_data, instance=user
+        )
+        assert edit_personal_information_form.is_valid()
+
+    def test_edit_personal_information_is_not_valid(self, user, bad_personal_information_data):
+        edit_personal_information_form = EditPersonalInformationForm(data=bad_personal_information_data)
+        assert not edit_personal_information_form.is_valid()
+
+    def test_posted_edit_personal_information_data(self, user, personal_information_data, client):
+        client.force_login(user)
+        response = client.post(reverse("edit_personal_information"), data=personal_information_data)
+        content = response.content.decode(response.charset)
+        assert response.status_code == 200
