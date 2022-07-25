@@ -109,30 +109,30 @@ def delete_account_view(request):
 def follow_request(request, username):
     if request.method == "POST":
         try:
-            user = User.objects.get(username=username)
-            profile = Profile.objects.get(user=user)
-            current_user_profile = request.user.profile
-            if request.user in followers(user):
-                unfollow(request.user, user)
+            user_whose_page_is_currently_being_viewed = User.objects.get(username=username)
+            profile_whose_page_is_currently_being_viewed = Profile.objects.get(user=user_whose_page_is_currently_being_viewed)
+            authenticated_user_profile = request.user.profile
+            if request.user in followers(user_whose_page_is_currently_being_viewed):
+                unfollow(request.user, user_whose_page_is_currently_being_viewed)
                 response = {"status": "unfollow"}
                 return HttpResponse(
                     json.dumps(response), content_type=JSON_CONTENT_TYPE
                 )
-            elif profile in current_user_profile.follow_requests.all():
-                current_user_profile.follow_requests.remove(profile)
+            elif profile_whose_page_is_currently_being_viewed in authenticated_user_profile.follow_requests.all():
+                authenticated_user_profile.follow_requests.remove(profile_whose_page_is_currently_being_viewed)
                 response = {"status": "cancel_follow_request"}
                 return HttpResponse(
                     json.dumps(response), content_type=JSON_CONTENT_TYPE
                 )
             else:
-                if profile.is_private:
-                    current_user_profile.follow_requests.add(profile)
+                if profile_whose_page_is_currently_being_viewed.is_private:
+                    authenticated_user_profile.follow_requests.add(profile_whose_page_is_currently_being_viewed)
                     response = {"status": "send_follow_request"}
                     return HttpResponse(
                         json.dumps(response), content_type=JSON_CONTENT_TYPE
                     )
                 else:
-                    follow(request.user, user)
+                    follow(request.user, user_whose_page_is_currently_being_viewed)
                     response = {"status": "followed"}
                     return HttpResponse(
                         json.dumps(response), content_type=JSON_CONTENT_TYPE
@@ -144,60 +144,56 @@ def follow_request(request, username):
             )
 
 
+@verified_email_required
 def follow_request_accepted(request, username):
-    if request.user.is_authenticated:
-        if request.method == "POST":
-            try:
-                user = User.objects.get(username=username)  # We get the current user
-                profile = Profile.objects.get(
-                    user=user
-                )  # We get the current user profile
-                current_user_profile = request.user.profile  # We get the logged-in user
-                profile.follow_requests.remove(current_user_profile)
-                follow(user, request.user)
-                profile.save()
-                response = {"status": "ok"}
-                return HttpResponse(
-                    json.dumps(response), content_type=JSON_CONTENT_TYPE
-                )
-            except ObjectDoesNotExist:
-                response = ""
-                return HttpResponse(response)
-        response = ""
-        return HttpResponse(response)
-    else:
-        return redirect("account_login")
+    if request.method == "POST":
+        try:
+            user_whose_page_is_currently_being_viewed = User.objects.get(username=username)  # We get the current user
+            profile_whose_page_is_currently_being_viewed = Profile.objects.get(
+                user=user_whose_page_is_currently_being_viewed
+            )  # We get the current user profile
+            authenticated_user_profile = request.user.profile  # We get the logged-in user
+            profile_whose_page_is_currently_being_viewed.follow_requests.remove(authenticated_user_profile)
+            follow(user_whose_page_is_currently_being_viewed, request.user)
+            profile_whose_page_is_currently_being_viewed.save()
+            response = {"status": "ok"}
+            return HttpResponse(
+                json.dumps(response), content_type=JSON_CONTENT_TYPE
+            )
+        except ObjectDoesNotExist:
+            response = ""
+            return HttpResponse(response)
+    response = ""
+    return HttpResponse(response)
 
 
+@verified_email_required
 def follow_request_declined(request, username):
-    if request.user.is_authenticated:
-        if request.method == "POST":
-            try:
-                profile = Profile.objects.get(user__username__iexact=username)
-                current_user_profile = request.user.profile
-                current_user_profile.follow_requests.remove(profile)
-                current_user_profile.save()
-                response = {"status": "ok"}
-                return HttpResponse(
-                    json.dumps(response), content_type=JSON_CONTENT_TYPE
-                )
-            except ObjectDoesNotExist:
-                response = ""
-                return HttpResponse(response)
-        response = ""
-        return HttpResponse(response)
-    else:
-        return redirect("account_login")
+    if request.method == "POST":
+        try:
+            profile_whose_page_is_currently_being_viewed = Profile.objects.get(user__username__iexact=username)
+            authenticated_user_profile = request.user.profile
+            authenticated_user_profile.follow_requests.remove(profile_whose_page_is_currently_being_viewed)
+            authenticated_user_profile.save()
+            response = {"status": "ok"}
+            return HttpResponse(
+                json.dumps(response), content_type=JSON_CONTENT_TYPE
+            )
+        except ObjectDoesNotExist:
+            response = ""
+            return HttpResponse(response)
+    response = ""
+    return HttpResponse(response)
 
 
+@verified_email_required
 def follow_request_list(request):
-    if request.user.is_authenticated:
-        current_user = request.user.profile
-        follow_requests = current_user.follow_request_by.all()
-        context = {"follow_requests": follow_requests}
-        return render(
-            request, "activity/follow_request/follow_request_layout.html", context
-        )
+    current_user = request.user.profile
+    follow_requests = current_user.follow_request_by.all()
+    context = {"follow_requests": follow_requests}
+    return render(
+        request, "activity/follow_request/follow_request_layout.html", context
+    )
 
 
 def followers_list(request, username):
