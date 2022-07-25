@@ -218,11 +218,15 @@ class TestFollowRequestView:
             first_name="John",
             last_name="Smith",
             username="JohnSmith",
-            email="JohnSmith@test.com",
+            email="John@test.com",
         )
         email_confirmation(user_we_want_to_follow)
         client.force_login(current_user)
-        response = client.post(reverse("follow_request", kwargs={"username": user_we_want_to_follow.username}))
+        response = client.post(
+            reverse(
+                "follow_request", kwargs={"username": user_we_want_to_follow.username}
+            )
+        )
         assert response.status_code == 200
         assert response.content == b'{"status": "followed"}'
 
@@ -233,12 +237,126 @@ class TestFollowRequestView:
             first_name="John",
             last_name="Smith",
             username="JohnSmith",
-            email="JohnSmith@test.com",
+            email="Smith@test.com",
         )
         email_confirmation(user_we_want_to_unfollow)
         follow(current_user, user_we_want_to_unfollow)
         client.force_login(current_user)
-        response = client.post(reverse("follow_request", kwargs={"username": user_we_want_to_unfollow.username}))
+        response = client.post(
+            reverse(
+                "follow_request", kwargs={"username": user_we_want_to_unfollow.username}
+            )
+        )
         assert response.status_code == 200
         assert response.content == b'{"status": "unfollow"}'
-        assert response.request["PATH_INFO"] == reverse("follow_request", kwargs={"username":user_we_want_to_unfollow.username})
+        assert response.request["PATH_INFO"] == reverse(
+            "follow_request", kwargs={"username": user_we_want_to_unfollow.username}
+        )
+
+    def test_send_follow_request_to_private_account(self, client):
+        current_user = UserFactory()
+        email_confirmation(current_user)
+        user_to_whom_the_follow_request_was_sent = UserFactory(
+            first_name="John",
+            last_name="Smith",
+            username="JohnSmith",
+            email="John@test.com",
+        )
+        email_confirmation(user_to_whom_the_follow_request_was_sent)
+        profile_to_whom_the_follow_request_was_sent = Profile.objects.get(
+            user=user_to_whom_the_follow_request_was_sent
+        )
+        profile_to_whom_the_follow_request_was_sent.is_private = True
+        profile_to_whom_the_follow_request_was_sent.save()
+        client.force_login(current_user)
+        response = client.post(
+            reverse(
+                "follow_request",
+                kwargs={"username": user_to_whom_the_follow_request_was_sent.username},
+            )
+        )
+        assert response.status_code == 200
+        assert response.content == b'{"status": "send_follow_request"}'
+
+    def test_cancel_follow_request_to_private_account(self, client):
+        current_user = UserFactory()
+        current_user_profile = Profile.objects.get(user=current_user)
+        email_confirmation(current_user)
+        user_to_whom_the_follow_request_was_sent = UserFactory(
+            first_name="John",
+            last_name="Smith",
+            username="JohnSmith",
+            email="JohnSmith@test.com",
+        )
+        email_confirmation(user_to_whom_the_follow_request_was_sent)
+        profile_to_whom_the_follow_request_was_sent = Profile.objects.get(
+            user=user_to_whom_the_follow_request_was_sent
+        )
+        profile_to_whom_the_follow_request_was_sent.is_private = True
+        current_user_profile.follow_requests.add(
+            profile_to_whom_the_follow_request_was_sent
+        )
+        profile_to_whom_the_follow_request_was_sent.save()
+        current_user_profile.save()
+        client.force_login(current_user)
+        response = client.post(
+            reverse(
+                "follow_request",
+                kwargs={"username": user_to_whom_the_follow_request_was_sent.username},
+            )
+        )
+        assert response.status_code == 200
+        assert response.content == b'{"status": "cancel_follow_request"}'
+
+    def test_when_profile_is_not_existing_return_not_found_status(self, client):
+        current_user = UserFactory()
+        email_confirmation(current_user)
+        client.force_login(current_user)
+        response = client.post(
+            reverse("follow_request", kwargs={"username": "test_user"})
+        )
+        assert response.status_code == 200
+        assert response.content == b'{"status": "not_found"}'
+
+    def test_follow_request_accepted(self, client):
+        authenticated_user = UserFactory()
+        email_confirmation(authenticated_user)
+        authenticated_user_profile = Profile.objects.get(user=authenticated_user)
+        user_whose_page_is_currently_being_viewed = UserFactory(
+            first_name="John",
+            last_name="Smith",
+            username="JohnSmith",
+            email="JohnSmith@test.com",
+        )
+        email_confirmation(user_whose_page_is_currently_being_viewed)
+        profile_whose_page_is_currently_being_viewed = Profile.objects.get(
+            user=user_whose_page_is_currently_being_viewed
+        )
+        authenticated_user_profile.follow_request_by.add(profile_whose_page_is_currently_being_viewed)
+        client.force_login(authenticated_user)
+        response = client.post(
+            reverse(
+                "follow_request_accepted",
+                kwargs={"username": user_whose_page_is_currently_being_viewed.username},
+            )
+        )
+        assert response.status_code == 200
+        assert response.content == b'{"status": "ok"}'
+        authenticated_user_followers = followers(authenticated_user)
+        assert user_whose_page_is_currently_being_viewed in authenticated_user_followers
+
+    def test_user_requested_to_follow_could_not_be_found_and_return_empty_string(self, client):
+        authenticated_user = UserFactory()
+        email_confirmation(authenticated_user)
+        client.force_login(authenticated_user)
+        response = client.post(reverse("follow_request_accepted", kwargs={"username": "test_user"}))
+        assert response.status_code == 200
+        assert response.content == b''
+
+    def test_get_method_on_follow_request_accepted_page_return_empty_string(self, client):
+        authenticated_user = UserFactory()
+        email_confirmation(authenticated_user)
+        client.force_login(authenticated_user)
+        response = client.get(reverse("follow_request_accepted", kwargs={"username": "test_username"}))
+        assert response.status_code == 200
+        assert response.content == b''
