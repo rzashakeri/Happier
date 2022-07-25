@@ -3,12 +3,15 @@ from actstream.actions import follow, unfollow
 from actstream.models import following, followers
 from allauth.account.decorators import verified_email_required
 from django.contrib import messages
+from django.contrib.auth import logout
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
 from actstream.actions import follow, unfollow
 from .forms import EditPersonalInformationForm, EditProfileForm
 from .models import Profile, User
+
+JSON_CONTENT_TYPE = 'application/json'
 
 
 @verified_email_required
@@ -20,8 +23,6 @@ def profile_view(request, username):
         user = User.objects.get(username=username)
         user_following = following(user)
         user_followers = followers(user)
-        logged_in_user_following = following(request.user)
-        logged_in_user_followers = followers(request.user)
         # if user not found raise 404 error
     except ObjectDoesNotExist:
         raise Http404
@@ -59,11 +60,8 @@ def edit_personal_information(request):
         )
         # pass context
     context = {"profile_form": profile_form}
-    # return request and template and context
     return render(request, "user_profile/edit_personal_information.html", context)
 
-
-# if a user is not authenticated, redirect to login page
 
 @verified_email_required
 def edit_profile_view(request):
@@ -86,7 +84,6 @@ def edit_profile_view(request):
         return render(request, "user_profile/edit_profile.html", context)
         # pass context
     context = {"profile_form": profile_form}
-    # return request and template and context
     return render(request, "user_profile/edit_profile.html", context)
 
 
@@ -96,8 +93,8 @@ def delete_account_view(request):
         data = request.POST.get("delete")
         if data == "yes":
             user = request.user
+            logout(request)
             user.delete()
-            user.save()
             messages.success(
                 request,
                 "Your account has been successfully deleted, We hope you will be back soon :)",
@@ -108,43 +105,43 @@ def delete_account_view(request):
     return render(request, "user_profile/delete_account.html")
 
 
+@verified_email_required
 def follow_request(request, username):
-    if request.user.is_authenticated:
-        if request.method == "POST":
-            try:
-                user = User.objects.get(username=username)
-                profile = Profile.objects.get(user=user)
-                current_user_profile = request.user.profile
-                if request.user in followers(user):
-                    unfollow(request.user, user)
-                    response = {"status": "unfollow"}
+    if request.method == "POST":
+        try:
+            user = User.objects.get(username=username)
+            profile = Profile.objects.get(user=user)
+            current_user_profile = request.user.profile
+            if request.user in followers(user):
+                unfollow(request.user, user)
+                response = {"status": "unfollow"}
+                return HttpResponse(
+                    json.dumps(response), content_type=JSON_CONTENT_TYPE
+                )
+            elif profile in current_user_profile.follow_requests.all():
+                current_user_profile.follow_requests.remove(profile)
+                response = {"status": "cancel_follow_request"}
+                return HttpResponse(
+                    json.dumps(response), content_type=JSON_CONTENT_TYPE
+                )
+            else:
+                if profile.is_private:
+                    current_user_profile.follow_requests.add(profile)
+                    response = {"status": "send_follow_request"}
                     return HttpResponse(
-                        json.dumps(response), content_type="application/json"
-                    )
-                elif profile in current_user_profile.follow_requests.all():
-                    current_user_profile.follow_requests.remove(profile)
-                    response = {"status": "cancel_follow_request"}
-                    return HttpResponse(
-                        json.dumps(response), content_type="application/json"
+                        json.dumps(response), content_type=JSON_CONTENT_TYPE
                     )
                 else:
-                    if profile.is_private:
-                        current_user_profile.follow_requests.add(profile)
-                        response = {"status": "send_follow_request"}
-                        return HttpResponse(
-                            json.dumps(response), content_type="application/json"
-                        )
-                    else:
-                        follow(request.user, user)
-                        response = {"status": "followed"}
-                        return HttpResponse(
-                            json.dumps(response), content_type="application/json"
-                        )
-            except ObjectDoesNotExist:
-                response = {"status": "not_found"}
-                return HttpResponse(
-                    json.dumps(response), content_type="application/json"
-                )
+                    follow(request.user, user)
+                    response = {"status": "followed"}
+                    return HttpResponse(
+                        json.dumps(response), content_type=JSON_CONTENT_TYPE
+                    )
+        except ObjectDoesNotExist:
+            response = {"status": "not_found"}
+            return HttpResponse(
+                json.dumps(response), content_type=JSON_CONTENT_TYPE
+            )
 
 
 def follow_request_accepted(request, username):
@@ -161,7 +158,7 @@ def follow_request_accepted(request, username):
                 profile.save()
                 response = {"status": "ok"}
                 return HttpResponse(
-                    json.dumps(response), content_type="application/json"
+                    json.dumps(response), content_type=JSON_CONTENT_TYPE
                 )
             except ObjectDoesNotExist:
                 response = ""
@@ -182,7 +179,7 @@ def follow_request_declined(request, username):
                 current_user_profile.save()
                 response = {"status": "ok"}
                 return HttpResponse(
-                    json.dumps(response), content_type="application/json"
+                    json.dumps(response), content_type=JSON_CONTENT_TYPE
                 )
             except ObjectDoesNotExist:
                 response = ""
