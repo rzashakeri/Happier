@@ -1,4 +1,5 @@
 import pytest
+from factory.django import DjangoModelFactory
 
 from user.forms import EditPersonalInformationForm
 from user.models import Profile
@@ -11,38 +12,28 @@ from django.core.files import File
 from django.core.files.uploadedfile import SimpleUploadedFile
 from datetime import datetime
 from birthday import BirthdayField, BirthdayManager
+import factory
 
 
-@pytest.fixture
-def user():
-    user, created = User.objects.get_or_create(  # created user
-        username="test_username",
-        first_name="test_first_name",
-        last_name="test_last_name",
-        email="test@test.com",
-        is_active=True,
-        is_superuser=False,
-    )
+class UserFactory(DjangoModelFactory):
+    class Meta:
+        model = User
 
+    first_name = "reza"
+    last_name = "shakeri"
+    username = "rzashakeri"
+    email = "rezashakeri@test.com"
+    is_active = True
+    is_superuser = False
+
+
+def email_confirmation(user):
     (
         user_email_address,
         created,
     ) = EmailAddress.objects.get_or_create(  # user email confirmation
         email=user.email, user=user, verified=True, primary=True
     )
-
-    return user
-
-
-@pytest.fixture
-def user_without_full_name():
-    user, created = User.objects.get_or_create(
-        username="test_username",
-        email="test@test.com",
-        is_active=True,
-        is_superuser=False,
-    )
-    return user
 
 
 @pytest.fixture
