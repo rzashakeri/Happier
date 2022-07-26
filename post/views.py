@@ -1,19 +1,18 @@
 import json
 
+from allauth.account.decorators import verified_email_required
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
 from post.models import PostLike, Post
 
 
+@verified_email_required
 def post_view(request, post_id):
-    if request.user.is_authenticated:
-        post = Post.objects.get(pk=post_id)
-        is_liked = PostLike.objects.filter(post=post, user=request.user).exists()
-        context = {"post": post, "is_liked": is_liked}
-        return render(request, "post/post.html", context)
-    else:
-        return redirect("account_login")
+    post = Post.objects.get(pk=post_id)
+    is_liked = PostLike.objects.filter(post=post, user=request.user).exists()
+    context = {"post": post, "is_liked": is_liked}
+    return render(request, "post/post.html", context)
 
 
 def like_view(request, post_id):
@@ -38,10 +37,8 @@ def like_view(request, post_id):
             )
 
 
+@verified_email_required
 def show_post_view(request, slug):
-    if request.user.is_authenticated:
-        post = Post.objects.get(slug=slug)
-        context = {"post": post}
-        return render(request, "post/post_layout.html", context)
-    else:
-        return redirect("account_login")
+    post = Post.objects.get(slug=slug)
+    context = {"post": post}
+    return render(request, "post/post_layout.html", context)
