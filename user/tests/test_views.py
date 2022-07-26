@@ -27,7 +27,7 @@ from ..models import User, Profile
 @pytest.mark.django_db
 class TestProfileView:
     def test_profile_view_when_user_is_authenticated_return_correct_profile(
-        self, client
+            self, client
     ):
         user = UserFactory()
         email_confirmation(user)
@@ -36,8 +36,8 @@ class TestProfileView:
         content = response.content.decode(response.charset)
         assert response.status_code == 200
         assert (
-            '<h1 class="text-3xl md:text-4xl font-semibold">Reza shakeri</h1>'
-            in str(content)
+                '<h1 class="text-3xl md:text-4xl font-semibold">Reza shakeri</h1>'
+                in str(content)
         )
         response = client.get("/user_not_exist", follow=True)
         assert response.status_code == 404
@@ -100,8 +100,8 @@ class TestEditProfileView:
         assert response.resolver_match.view_name == "edit_profile"
         assert response.request["PATH_INFO"] == reverse("edit_profile")
         assert (
-            '<input type="text" name="job" value="Software Engineer" class="input input-bordered w-full mt-1" placeholder="Job" maxlength="20" id="id_job">'
-            in str(content)
+                '<input type="text" name="job" value="Software Engineer" class="input input-bordered w-full mt-1" placeholder="Job" maxlength="20" id="id_job">'
+                in str(content)
         )
         edited_profile = Profile.objects.get(user_id=user.pk)
         assert edited_profile.is_private
@@ -137,7 +137,7 @@ class TestEditPersonalInformationView:
         assert edit_personal_information_form.is_valid()
 
     def test_edit_personal_information_is_not_valid(
-        self, bad_personal_information_data
+            self, bad_personal_information_data
     ):
         user = UserFactory()
         email_confirmation(user)
@@ -147,7 +147,7 @@ class TestEditPersonalInformationView:
         assert not edit_personal_information_form.is_valid()
 
     def test_posted_edit_personal_information_data(
-        self, personal_information_data, client
+            self, personal_information_data, client
     ):
         user = UserFactory()
         email_confirmation(user)
@@ -158,8 +158,8 @@ class TestEditPersonalInformationView:
         content = response.content.decode(response.charset)
         assert response.status_code == 200
         assert (
-            '<input type="text" name="username" value="rzashakeri" class="mt-1 input input-bordered w-full max-w-xs" placeholder="Username" minlength="5" maxlength="150" required id="id_username">'
-            in str(content)
+                '<input type="text" name="username" value="rzashakeri" class="mt-1 input input-bordered w-full max-w-xs" placeholder="Username" minlength="5" maxlength="150" required id="id_username">'
+                in str(content)
         )
         assert response.request["PATH_INFO"] == "/accounts/edit/personal-information"
         assert response.wsgi_request.user.username == "rzashakeri"
@@ -183,8 +183,8 @@ class TestDeleteAccountView:
         assert response.status_code == 200
         assert response.request["PATH_INFO"] == reverse("home")
         assert (
-            '<p class="mx-3">Your account has been successfully deleted, We hope you will be back soon :)</p>'
-            in str(content)
+                '<p class="mx-3">Your account has been successfully deleted, We hope you will be back soon :)</p>'
+                in str(content)
         )
         try:
             User.objects.get(pk=user.pk)
@@ -218,7 +218,7 @@ class TestFollowRequestView:
             first_name="John",
             last_name="Smith",
             username="JohnSmith",
-            email="John@test.com",
+            email="Joh@test.com",
         )
         email_confirmation(user_we_want_to_follow)
         client.force_login(current_user)
@@ -347,8 +347,8 @@ class TestFollowRequestView:
         authenticated_user_followers = followers(authenticated_user)
         assert user_whose_page_is_currently_being_viewed in authenticated_user_followers
 
-    def test_user_requested_to_follow_could_not_be_found_and_return_empty_string(
-        self, client
+    def test_when_user_related_of_follow_request_accepted_view_not_found_return_empty_string(
+            self, client
     ):
         authenticated_user = UserFactory()
         email_confirmation(authenticated_user)
@@ -360,7 +360,7 @@ class TestFollowRequestView:
         assert response.content == b""
 
     def test_get_method_on_follow_request_accepted_page_return_empty_string(
-        self, client
+            self, client
     ):
         authenticated_user = UserFactory()
         email_confirmation(authenticated_user)
@@ -390,8 +390,8 @@ class TestFollowRequestView:
         )
         authenticated_user_follow_requests = authenticated_user_profile.follow_request_by.all()
         assert (
-            profile_whose_page_is_currently_being_viewed
-            in authenticated_user_follow_requests
+                profile_whose_page_is_currently_being_viewed
+                in authenticated_user_follow_requests
         )
         client.force_login(authenticated_user)
         response = client.post(
@@ -402,3 +402,43 @@ class TestFollowRequestView:
         )
         assert response.status_code == 200
         assert response.content == b'{"status": "ok"}'
+
+    def test_when_user_related_of_follow_request_declined_view_not_found_return_empty_string(self, client):
+        authenticated_user = UserFactory()
+        email_confirmation(authenticated_user)
+        client.force_login(authenticated_user)
+        response = client.post(reverse("follow_request_declined", kwargs={"username": "test_username"}))
+        assert response.status_code == 200
+        assert response.content == b""
+
+    def test_get_method_on_follow_request_declined_page_return_empty_string(self, client):
+        authenticated_user = UserFactory()
+        email_confirmation(authenticated_user)
+        client.force_login(authenticated_user)
+        response = client.get(reverse("follow_request_declined", kwargs={"username": "test_username"}))
+        assert response.status_code == 200
+        assert response.content == b""
+
+
+@pytest.mark.django_db
+class TestFollowerListView:
+    def test_follow_request_list(self,client):
+        authenticated_user = UserFactory()
+        email_confirmation(authenticated_user)
+        authenticated_user_profile = authenticated_user.profile
+        user_who_requested_to_follow = UserFactory(
+            first_name="John",
+            last_name="Smith",
+            username="JohnSmith",
+            email="John@test.com",
+        )
+        email_confirmation(user_who_requested_to_follow)
+        profile_who_requested_to_follow = user_who_requested_to_follow.profile
+        profile_who_requested_to_follow.follow_requests.add(authenticated_user_profile)
+        authenticated_user_follow_request_list = authenticated_user_profile.follow_request_by.all()
+        assert profile_who_requested_to_follow in authenticated_user_follow_request_list
+        client.force_login(authenticated_user)
+        response = client.get(reverse("follow_request_list"))
+        content = response.content.decode(response.charset)
+        assert response.status_code == 200
+        assert 'JohnSmith' in str(content)
