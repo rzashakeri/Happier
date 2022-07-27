@@ -1,0 +1,22 @@
+<div id="FirstLogin"
+     class="p-1 mt-6 shadow-xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 rounded-2xl">
+    <div class="block bg-base-100 p-5 rounded-xl">
+        <div class="flex justify-between ">
+            <h5 class="text-2xl font-bold text-base-content">Welcome {{ request.user }}</h5>
+            <button onclick='remove("FirstLogin")'
+                    class="p-1 transition-colors duration-200 transform rounded-md hover:bg-opacity-25 hover:bg-gray-600 focus:outline-none">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+        <div class="sm:pr-8">
+            <p class="mt-2 text-md text-gray-500">
+                We hope we can create a good experience for you
+            </p>
+        </div>
+    </div>
+
+
+</div>
