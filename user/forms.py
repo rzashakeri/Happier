@@ -83,20 +83,6 @@ class CustomChangePasswordForm(ChangePasswordForm):
         ] = "input input-bordered w-full my-3"
 
 
-class CustomSetPasswordForm(SetPasswordForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields[""].widget.attrs[
-            "class"
-        ] = "input input-bordered w-full max-w-xs my-3"
-        self.fields["password1"].widget.attrs[
-            "class"
-        ] = "input input-bordered w-full max-w-xs my-3"
-        self.fields["password2"].widget.attrs[
-            "class"
-        ] = "input input-bordered w-full max-w-xs my-3"
-
-
 class EditPersonalInformationForm(forms.ModelForm):
     class Meta:
         model = User
