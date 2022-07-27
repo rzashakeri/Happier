@@ -1,5 +1,5 @@
 window.addEventListener('load', function () {
-        var music_players = document.querySelectorAll('.music-player');
+        let music_players = document.querySelectorAll('.music-player');
         if (music_players != null) {
             music_players.forEach(music_player => {
                     const AudioPlayer = music_player.getElementsByClassName('audio-player').item(0);
@@ -31,10 +31,6 @@ window.addEventListener('load', function () {
                         ]
 
                     });
-                    const WaveWidth = wavesurfer.drawer.getWidth();
-                    const WaveContainerWidth = AudioPlayer.offsetWidth;
-                    const PlayButtonWidth = 62;
-                    const Width = WaveContainerWidth - PlayButtonWidth;
 
 
                     const source = AudioPlayer.getAttribute('src');
@@ -94,7 +90,7 @@ window.addEventListener('load', function () {
 
                     const volumeIcon = music_player.getElementsByClassName("volume-icon").item(0);
 
-                    var clicked = false;
+                    let clicked = false;
                     const toggleMute = () => {
                         wavesurfer.toggleMute();
                         if (clicked) {
@@ -114,11 +110,11 @@ window.addEventListener('load', function () {
 )
 
 function getCookie(name) {
-    var cookieValue = null;
+    let cookieValue = null;
     if (document.cookie && document.cookie != '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
+        let cookies = document.cookie.split(';');
+        for (const element of cookies) {
+            let cookie = jQuery.trim(element);
             // Does this cookie string begin with the name we want?
             if (cookie.substring(0, name.length + 1) == (name + '=')) {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
@@ -129,7 +125,7 @@ function getCookie(name) {
     return cookieValue;
 }
 
-var csrftoken = getCookie('csrftoken');
+let csrftoken = getCookie('csrftoken');
 
 function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
@@ -171,7 +167,7 @@ window.addEventListener('load', function () {
                             LikeSvg.setAttribute("stroke", "currentColor");
                         }
                     },
-                    error: function (xhr, errmsg, err) {
+                    error: function (xhr, errmsg) {
                         $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
                             " <a href='#' class='close'>&times;</a></div>");
                         console.log(xhr.status + ": " + xhr.responseText);
@@ -188,3 +184,7 @@ $('#id_password2').hidePassword(true);
 $('#id_password').hidePassword(true);
 $('#id_oldpassword').hidePassword(true);
 
+function remove(TagId){
+    let IdName = "#"+ TagId
+    $(IdName).remove();
+}
