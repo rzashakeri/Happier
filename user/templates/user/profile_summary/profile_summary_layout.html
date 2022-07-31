@@ -14,7 +14,7 @@
     </div>
     <div class="flex flex-col gap-4 w-full">
         <div class="flex flex-col justify-center items-center">
-            {% include "user_profile/profile_summary/components/fullname_or_username_component.html" %}
+            {% include "user/profile_summary/components/fullname_or_username_component.html" %}
             {% if request.user.profile.job %}
                 <span class="text-base-content capitalize">{{ request.user.profile.job }}</span>
             {% endif %}
