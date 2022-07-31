@@ -23,13 +23,17 @@ body {
     color: #000;
 }
 
+textarea {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    width: 100%;
+}
+
 ul.errorlist {
     color: #F87272;
     max-width: 400px;
-}
-
-input[type="file"] {
-    display: none;
 }
 
 .alert.mb-4 {
@@ -189,4 +193,8 @@ input[type="file"] {
 .overflow-x-auto::-webkit-scrollbar-thumb {
     background-color: hsl(var(--b2, var(--b1)) / var(--tw-bg-opacity));
     border-radius: 100px;
+}
+
+input[type="file"] {
+    display: none;
 }
