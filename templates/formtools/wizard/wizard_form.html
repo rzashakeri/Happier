@@ -1,0 +1,83 @@
+{% load i18n %}
+{% load custom_template_tag %}
+{% load static %}
+<div id="FirstLogin" class="flex lg:flex lg:flex-col p-2 gap-2 items-center	justify-center w-full">
+    <ul class="steps steps-vertical lg:steps-horizontal lg:overflow-hidden pr-3 lg:w-[574px] lg:ml-4 xl:w-[500px] 2xl:w-[630px] overflow-hidden">
+        {% for step in wizard.steps.all %}
+            <li class="step {% if step == wizard.steps.current %} step-success{% endif %}">
+            </li>
+        {% endfor %}
+    </ul>
+    <form id="FirstLoginForm" method="Post" action="{% url "user_wizard" %}" class="w-full"
+          enctype="multipart/form-data">{% csrf_token %}
+        <div class="w-full">
+            <div id="FirstLoginData"
+                 class="flex flex-wrap gap-2 w-full">
+                {{ wizard.management_form }}
+                {% if wizard.form.forms %}
+                    {{ wizard.form.management_form }}
+                    {% for form in wizard.form.forms %}
+                        {% for field in form %}
+                            {{ field }}
+                        {% endfor %}
+                    {% endfor %}
+                {% else %}
+                    {% for field in wizard.form %}
+                        {% if field.name == "profile_image" %}
+                            <div class="w-full flex flex-col justify-center items-center gap-3">
+                                <div class="avatar placeholder">
+                                    <div class="w-24 rounded-full">
+                                        <img id="ImagePreview" src="/static/images/avatar.png" alt="Porfile image"/>
+                                    </div>
+                                </div>
+                                <label class="btn btn-ghost capitalize" for="{{ field.auto_id }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6  mr-2" fill="none"
+                                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                                    </svg>
+                                    Upload Profile Image </label>
+                                {{ field }}
+                            </div>
+                        {% elif field.name == "birthday" %}
+                            <div class="w-full flex flex-wrap justify-between gap-3">
+                                <label class="" for="{{ field.auto_id }}">{{ field.label }}</label>
+                                {{ field }}
+                            </div>
+                        {% else %}
+                            <label class="" for="{{ field.auto_id }}">{{ field.label }}</label>
+                            {{ field }}
+                        {% endif %}
+
+
+                    {% endfor %}
+                {% endif %}
+
+            </div>
+            <div id="FirstLoginLoading" class="mt-3 flex flex-wrap max-2sm:flex max-2sm:flex-col max-2sm:gap-3 justify-between">
+                <button id="FirstLoginSubmitButton" class="btn btn-success capitalize" type="submit"
+                        value="{% trans "submit" %}">
+                    Submit
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-2" fill="none" viewBox="0 0 24 24"
+                         stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </button>
+                <button class="btn btn-info capitalize" type="submit"
+                        value="{% trans "Skip" %}">
+                    Skip
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-2" fill="none" viewBox="0 0 24 24"
+                         stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M5 5l7 7-7 7"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+
+
+
+
