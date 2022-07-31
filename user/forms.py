@@ -9,11 +9,20 @@ from allauth.account.forms import (
     ChangePasswordForm,
     SetPasswordForm,
 )
+from constrainedfilefield.fields import ConstrainedImageField, ConstrainedFileField
 from crispy_forms.helper import FormHelper
 from django import forms
+from django.forms import SelectDateWidget
 
 from user.models import User
-from .models import Profile
+from utility.generator import user_directory_path
+from user.models import Profile
+from user.tests.fixtures import profile_image
+from user.views import edit_personal_information
+
+class_list = "block w-full mt-2 input input-bordered w-full max-w-xs"
+edit_personal_information_form_class_list = "mt-1 input input-bordered w-full max-w-xs"
+change_password_form_class_list = "input input-bordered w-full my-3"
 
 
 class CustomSignupForm(SignupForm):
@@ -21,13 +30,13 @@ class CustomSignupForm(SignupForm):
         super().__init__(*args, **kwargs)
         self.fields["username"].widget.attrs[
             "class"
-        ] = "block w-full mt-2 input input-bordered w-full max-w-xs"
+        ] = class_list
         self.fields["email"].widget.attrs[
             "class"
-        ] = "block w-full mt-2 input input-bordered w-full max-w-xs"
+        ] = class_list
         self.fields["password1"].widget.attrs[
             "class"
-        ] = "block w-full mt-2 input input-bordered w-full max-w-xs"
+        ] = class_list
 
 
 class CustomSigninForm(LoginForm):
@@ -35,10 +44,10 @@ class CustomSigninForm(LoginForm):
         super().__init__(*args, **kwargs)
         self.fields["login"].widget.attrs[
             "class"
-        ] = "block w-full mt-2 input input-bordered w-full max-w-xs"
+        ] = class_list
         self.fields["password"].widget.attrs[
             "class"
-        ] = "block w-full mt-2 input input-bordered w-full max-w-xs"
+        ] = class_list
         self.helper = FormHelper(self)
 
 
@@ -55,10 +64,10 @@ class CustomResetPasswordFromKeyForm(ResetPasswordKeyForm):
         super().__init__(*args, **kwargs)
         self.fields["password1"].widget.attrs[
             "class"
-        ] = "block w-full mt-2 input input-bordered w-full max-w-xs"
+        ] = class_list
         self.fields["password2"].widget.attrs[
             "class"
-        ] = "block w-full mt-2 input input-bordered w-full max-w-xs"
+        ] = class_list
 
 
 class CustomAddEmailForm(AddEmailForm):
@@ -74,13 +83,13 @@ class CustomChangePasswordForm(ChangePasswordForm):
         super().__init__(*args, **kwargs)
         self.fields["oldpassword"].widget.attrs[
             "class"
-        ] = "input input-bordered w-full my-3"
+        ] = change_password_form_class_list
         self.fields["password1"].widget.attrs[
             "class"
-        ] = "input input-bordered w-full my-3"
+        ] = change_password_form_class_list
         self.fields["password2"].widget.attrs[
             "class"
-        ] = "input input-bordered w-full my-3"
+        ] = change_password_form_class_list
 
 
 class EditPersonalInformationForm(forms.ModelForm):
@@ -95,19 +104,19 @@ class EditPersonalInformationForm(forms.ModelForm):
         widgets = {
             "first_name": forms.TextInput(
                 attrs={
-                    "class": "mt-1 input input-bordered w-full max-w-xs",
+                    "class": edit_personal_information_form_class_list ,
                     "placeholder": "First Name",
                 }
             ),
             "last_name": forms.TextInput(
                 attrs={
-                    "class": "mt-1 input input-bordered w-full max-w-xs",
+                    "class": edit_personal_information_form_class_list,
                     "placeholder": "Last Name",
                 }
             ),
             "email": forms.TextInput(
                 attrs={
-                    "class": "mt-1 input input-bordered w-full max-w-xs",
+                    "class": edit_personal_information_form_class_list,
                     "placeholder": "Email",
                 }
             ),
@@ -115,7 +124,7 @@ class EditPersonalInformationForm(forms.ModelForm):
                 attrs={
                     "class": "mt-1 input input-bordered w-full max-w-xs",
                     "placeholder": "Username",
-                    "minlength": "5"
+                    "minlength": "5",
                 }
             ),
             "biography": forms.Textarea(
@@ -154,7 +163,7 @@ class EditProfileForm(forms.ModelForm):
                     "rows": "5",
                 }
             ),
-            "profile_image": forms.FileInput(attrs={"class": ""}),
+            "profile_image": forms.FileInput(attrs={"class": "pond"}),
             "birthday": forms.SelectDateWidget(years=range(1950, year)),
             "job": forms.TextInput(
                 attrs={
@@ -164,3 +173,64 @@ class EditProfileForm(forms.ModelForm):
             ),
             "is_private": forms.CheckboxInput(attrs={"class": "toggle toggle-accent"}),
         }
+
+
+# getting user information in seperated forms
+
+
+class FullNameForm(forms.Form):
+    class_value = "input input-bordered w-full my-2"
+    first_name = forms.CharField(
+        widget=forms.TextInput(attrs={"class": class_value, "id": "first_name", "placeholder": "What Is Your Name ?"}),
+        required=False,
+    )
+    last_name = forms.CharField(
+        widget=forms.TextInput(attrs={"class": class_value, "id": "last_name", "placeholder": "What Is Last Name ?"}),
+        required=False,
+    )
+
+
+class BiographyForm(forms.Form):
+    biography = forms.CharField(
+        max_length=200,
+        widget=forms.Textarea(
+            attrs={"class": "textarea textarea-bordered my-2", "rows": "5", "placeholder": "Tell about yourself in 200 characters"}
+        ),
+        required=False,
+    )
+
+
+class BirthdayForm(forms.Form):
+    year = datetime.date.today().year
+    birthday = forms.DateField(
+        widget=SelectDateWidget(
+            empty_label=("Choose Year", "Choose Month", "Choose Day"),
+            years=range(1950, year),
+            attrs={"style": "background-color:#ededed;border-radius: 5px;"},
+        ),
+        required=False,
+    )
+
+
+class JobForm(forms.Form):
+    job = forms.CharField(
+        widget=forms.TextInput(attrs={"class": "input input-bordered w-full my-2",  "placeholder": "What Is Your Job ?"}),
+        required=False,
+    )
+
+
+class UploadProfileImageForm(forms.Form):
+    profile_image = ConstrainedImageField(
+        upload_to=user_directory_path,
+        null=True,
+        blank=True,
+        content_types=["image/png", "image/jpeg"],
+        max_upload_size=10485760,
+    ).formfield(
+        widget=forms.FileInput(
+            attrs={
+                "class": "w-[100px] max-2sm:flex max-2sm:flex-col",
+                "onchange": "loadFile(event)"
+            }
+        )
+    )
