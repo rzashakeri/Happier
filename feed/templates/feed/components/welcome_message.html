@@ -1,22 +1,45 @@
 <div id="FirstLogin"
-     class="p-1 mt-6 shadow-xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 rounded-2xl">
+     class="p-1 my-6 shadow-xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 rounded-2xl ">
     <div class="block bg-base-100 p-5 rounded-xl">
         <div class="flex justify-between ">
             <h5 class="text-2xl font-bold text-base-content">Welcome 🎉 </h5>
-            <button onclick='remove("FirstLogin")'
-                    class="p-1 transition-colors duration-200 transform rounded-md hover:bg-opacity-25 hover:bg-gray-600 focus:outline-none">
-                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                          stroke-linejoin="round"/>
-                </svg>
-            </button>
+            <form id="RemoveWelcomeMessageForm" method="POST" action="{% url "remove_welcome_message" %}">
+                {% csrf_token %}
+                <button type="submit"
+                        class="p-1 transition-colors duration-200 transform rounded-md hover:bg-opacity-25 hover:bg-gray-600 focus:outline-none">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                              stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </form>
+
         </div>
-        <div class="sm:pr-8">
-            <p class="mt-2 text-md text-gray-500">
-                We hope we can create a good experience for you
+        <div class="sm:pr-8 flex flex-col gap-3">
+            <p class="mt-2 text-md font-semibold text-gray-500">
+                If we can get to know each other better, we can help each other more. Do you want this to happen?
             </p>
+            <div class="flex gap-3">
+                <form id="FirstLoginForm" method="GET" action="{% url "user_wizard" %}"
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-success w-fit capitalize">Yes sure 😉</button>
+                </form>
+                <form id="RemoveWelcomeMessageForm" method="POST" action="{% url "remove_welcome_message" %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-active btn-ghost w-fit capitalize">No 🙏</button>
+                </form>
+            </div>
         </div>
     </div>
-
-
+</div>
+<div class="modal modal-bottom sm:modal-middle" id="FirstLoginModal">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg">Congratulations random Internet user!</h3>
+        <p class="py-4">You've been selected for a chance to get one year of subscription to use
+            Wikipedia for free!</p>
+        <div class="modal-action">
+            <a onclick="remove('FirstLoginModal')" href="#" class="btn">Yay!</a>
+        </div>
+    </div>
 </div>
