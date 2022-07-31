@@ -7,6 +7,7 @@ module.exports = {
         '../post/**/*.{html,js, py}',
         '../user/**/*.{html,js,py}',
         '../activity/**/*.{html,js,py}',
+        '../static/js/**/*.{html,js,py}',
         '../venv/Lib/site-packages/crispy_tailwind/templates/**/*.{html,js}',
     ],
     darkMode: 'data-theme',
