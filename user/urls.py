@@ -10,8 +10,9 @@ from user.views import (
     follow_request,
     follow_request_accepted,
     follow_request_declined,
-    follow_request_list,
+    follow_request_list, UserWizard, remove_welcome_message,
 )
+from .forms import FullNameForm, BiographyForm, BirthdayForm, JobForm, UploadProfileImageForm
 
 urlpatterns = [
     path("<str:username>/", profile_view, name="profile"),
@@ -40,8 +41,18 @@ urlpatterns = [
         name="follow_request_declined",
     ),
     path(
-        "account/follow/requests/",
+        "accounts/follow/requests/",
         follow_request_list,
         name="follow_request_list",
     ),
+    path(
+        "accounts/wizard/",
+        UserWizard.as_view([FullNameForm, BiographyForm, BirthdayForm, JobForm, UploadProfileImageForm]),
+        name="user_wizard"
+    ),
+    path(
+        "remove/welcome/message/",
+        remove_welcome_message,
+        name="remove_welcome_message"
+    )
 ]
