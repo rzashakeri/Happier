@@ -111,12 +111,12 @@ window.addEventListener('load', function () {
 
 function getCookie(name) {
     let cookieValue = null;
-    if (document.cookie && document.cookie != '') {
-        let cookies = document.cookie.split(';');
-        for (const element of cookies) {
-            let cookie = jQuery.trim(element);
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
             // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                 break;
             }
@@ -125,7 +125,7 @@ function getCookie(name) {
     return cookieValue;
 }
 
-let csrftoken = getCookie('csrftoken');
+const csrftoken = getCookie('csrftoken');
 
 function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
@@ -184,7 +184,15 @@ $('#id_password2').hidePassword(true);
 $('#id_password').hidePassword(true);
 $('#id_oldpassword').hidePassword(true);
 
-function remove(TagId){
-    let IdName = "#"+ TagId
+function remove(TagId) {
+    let IdName = "#" + TagId
     $(IdName).remove();
 }
+
+let loadFile = function (event) {
+    let output = document.getElementById('ImagePreview');
+    output.src = URL.createObjectURL(event.target.files[0]);
+    output.onload = function () {
+        URL.revokeObjectURL(output.src)
+    }
+};
