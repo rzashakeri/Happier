@@ -3,7 +3,7 @@
 {% load static %}
 <section>
     <h1 class="text-3xl font-bold mt-10 capitalize">Hi {{ request.user }} 🖐️</h1>
-    {% if request.user.date_joined|date:"SHORT_DATE_FORMAT" == request.user.last_login|date:"SHORT_DATE_FORMAT" %}
+    {% if request.user.profile.show_welcome_message %}
         {% include "feed/components/welcome_message.html" %}
     {% endif %}
     {% for following in followings %}
