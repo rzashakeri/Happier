@@ -31,12 +31,13 @@
 
     <div class="flex-col py-5 lg:flex-row justify-center bg-base-200">
         <div class="flex flex-col lg:flex-row justify-center md:gap-6">
-            {% include 'user_profile/components/sidebar.html' %}
+            {% include 'user/components/sidebar.html' %}
             <div class="mt-5 md:mt-0 rounded-lg relative overflow-x-auto">
                 <div class=" shadow-md bg-base-100 rounded-lg flex min-h-[6rem] min-w-[18rem] max-w-4xl flex-wrap items-center justify-center gap-2 overflow-x-hidden border bg-cover bg-top"
                      style="background-size: 5px 5px">
                     <div class="overflow-x-auto w-full">
                         <table class="table w-full ">
+                        <caption>This is a table For Show Active Sessions</caption>
                             <thead>
                             <tr class="bg-base-100">
                                 <th>{% trans "Location" %}</th>

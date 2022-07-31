@@ -28,7 +28,7 @@
     {% endif %}
     <div class="flex w-full justify-center bg-base-200">
         <div class="flex flex-col lg:flex-row justify-center w-max my-5 md:gap-6">
-            {% include 'user_profile/components/sidebar.html' %}
+            {% include 'user/components/sidebar.html' %}
             <section class="mt-5 grid-cols-3 md:mt-0 md:col-span-3">
                 <div class="container mx-auto flex flex-col justify-center w-fit gap-5 bg-base-100 shadow-md rounded-md p-9">
                     <span class="block mb-2 text-xs font-medium tracking-widest text-center">Upgrade Your Account Security</span>
@@ -42,7 +42,7 @@
                                 {% trans 'Scan the QR code below with a token generator of your choice (for instance Google Authenticator).' %}
                             </p>
                             <div class="flex justify-center">
-                                <img src="{{ qr_code_url }}" class="w-48"/>
+                                <img src="{{ qr_code_url }}" alt="QR Code" class="w-48"/>
                             </div>
                         </div>
                         <div class="w-full sm:w-80 flex flex-col gap-3">
