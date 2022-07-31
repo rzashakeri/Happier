@@ -1,15 +1,22 @@
 import json
+import os
+from abc import ABC
+
 from actstream.actions import follow, unfollow
 from actstream.models import following, followers
 from allauth.account.decorators import verified_email_required
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.files.storage import FileSystemStorage, DefaultStorage
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
 from actstream.actions import follow, unfollow
-from .forms import EditPersonalInformationForm, EditProfileForm
-from .models import Profile, User
+
+from config import settings
+import user.forms as form
+from user.models import Profile, User
+from formtools.wizard.views import SessionWizardView, WizardView
 
 JSON_CONTENT_TYPE = 'application/json'
 
@@ -34,16 +41,16 @@ def profile_view(request, username):
         "following": user_following,
         "followers": user_followers,
     }
-    return render(request, "user_profile/profile.html", context)
+    return render(request, "user/profile.html", context)
 
 
 @verified_email_required
 def edit_personal_information(request):
-    profile_form = EditPersonalInformationForm(instance=request.user)
+    profile_form = form.EditPersonalInformationForm(instance=request.user)
     # checked request is post?
     if request.method == "POST":
         # send user data to edit profile form
-        profile_form = EditPersonalInformationForm(
+        profile_form = form.EditPersonalInformationForm(
             request.POST, instance=request.user
         )
         # check user profile form is valid
@@ -56,20 +63,20 @@ def edit_personal_information(request):
         context = {"profile_form": profile_form}
         # render request and template and context
         return render(
-            request, "user_profile/edit_personal_information.html", context
+            request, "user/edit_personal_information.html", context
         )
         # pass context
     context = {"profile_form": profile_form}
-    return render(request, "user_profile/edit_personal_information.html", context)
+    return render(request, "user/edit_personal_information.html", context)
 
 
 @verified_email_required
 def edit_profile_view(request):
-    profile_form = EditProfileForm(instance=request.user.profile)
+    profile_form = form.EditProfileForm(instance=request.user.profile)
     # check request is post?
     if request.method == "POST":
         # send user data to edit profile form
-        profile_form = EditProfileForm(
+        profile_form = form.EditProfileForm(
             request.POST, request.FILES, instance=request.user.profile
         )
         # check user profile form is valid
@@ -81,10 +88,10 @@ def edit_profile_view(request):
         # put edit profile form with context and send to template
         context = {"profile_form": profile_form}
         # render request and template and context
-        return render(request, "user_profile/edit_profile.html", context)
+        return render(request, "user/edit_profile.html", context)
         # pass context
     context = {"profile_form": profile_form}
-    return render(request, "user_profile/edit_profile.html", context)
+    return render(request, "user/edit_profile.html", context)
 
 
 @verified_email_required
@@ -102,7 +109,7 @@ def delete_account_view(request):
             return redirect("home")
         else:
             return redirect("home")
-    return render(request, "user_profile/delete_account.html")
+    return render(request, "user/delete_account.html")
 
 
 @verified_email_required
@@ -196,15 +203,71 @@ def follow_request_list(request):
     )
 
 
+@verified_email_required
 def followers_list(request, username):
     user = User.objects.get(username=username)
     user_followers = followers(user)
     context = {"followers": user_followers}
-    return render(request, "user_profile/followers.html", context)
+    return render(request, "user/followers.html", context)
 
 
+@verified_email_required
 def followings_list(request, username):
     user = User.objects.get(username=username)
     user_following = following(user)
     context = {"followings": user_following}
-    return render(request, "user_profile/following.html", context)
+    return render(request, "user/following.html", context)
+
+
+def remove_welcome_message(request):
+    if request.method == "POST":
+        profile = request.user.profile
+        profile.show_welcome_message = False
+        profile.save()
+        response = {"status": "ok"}
+        return HttpResponse(json.dumps(response), content_type="application/json")
+
+
+class UserWizard(SessionWizardView):
+    file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'temp'))
+
+    def done(self, form_list, **kwargs):
+        form_data = [form.cleaned_data for form in form_list]
+        first_name = form_data[0]["first_name"]
+        last_name = form_data[0]["last_name"]
+        biography = form_data[1]["biography"]
+        birthday = form_data[2]["birthday"]
+        job = form_data[3]["job"]
+        profile_image = form_data[4]["profile_image"]
+
+        current_user = self.request.user
+        user = User.objects.get(pk=current_user.pk)
+        if first_name is not None:
+            user.first_name = first_name
+            user.save()
+
+        if last_name is not None:
+            user.last_name = last_name
+            user.save()
+
+        profile = Profile.objects.get(user=user)
+        if biography is not None:
+            profile.biography = biography
+            profile.save()
+
+        if birthday is not None:
+            profile.birthday = birthday
+            profile.save()
+
+        if job is not None:
+            profile.job = job
+            profile.save()
+
+        if profile_image is not None:
+            profile.profile_image = profile_image
+            profile.save()
+
+        remove_welcome_message(self.request)
+
+        response = {"status": "ok"}
+        return HttpResponse(json.dumps(response), content_type="application/json")
