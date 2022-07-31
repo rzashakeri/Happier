@@ -1,7 +1,7 @@
 import pytest
 from factory.django import DjangoModelFactory
 
-from user.forms import EditPersonalInformationForm
+
 from user.models import Profile
 from user.models import User
 from user.models import User, Profile
