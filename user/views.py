@@ -94,6 +94,17 @@ def edit_profile_view(request):
     return render(request, "user/edit_profile.html", context)
 
 
+def delete_profile_image(request):
+    if request.method == "POST":
+        profile_image = request.user.profile.profile_image
+        profile_image.delete()
+        response = {"status": "ok"}
+        return HttpResponse(json.dumps(response), content_type=JSON_CONTENT_TYPE)
+    else:
+        response = ""
+        return HttpResponse(response)
+
+
 @verified_email_required
 def delete_account_view(request):
     if request.method == "POST":
