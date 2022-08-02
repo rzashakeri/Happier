@@ -10,13 +10,13 @@ from user.views import (
     follow_request,
     follow_request_accepted,
     follow_request_declined,
-    follow_request_list, UserWizard, remove_welcome_message,
+    follow_request_list, UserWizard, remove_welcome_message, delete_profile_image,
 )
 from .forms import FullNameForm, BiographyForm, BirthdayForm, JobForm, UploadProfileImageForm
 
 urlpatterns = [
     path("<str:username>/", profile_view, name="profile"),
-    path("accounts/edit/profile", edit_profile_view, name="edit_profile"),
+    path("accounts/edit/profile/", edit_profile_view, name="edit_profile"),
     path(
         "accounts/edit/personal-information",
         edit_personal_information,
@@ -54,5 +54,10 @@ urlpatterns = [
         "remove/welcome/message/",
         remove_welcome_message,
         name="remove_welcome_message"
+    ),
+    path(
+        "delete/profile/image/",
+        delete_profile_image,
+        name="delete_profile_image"
     )
 ]
