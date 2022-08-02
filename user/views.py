@@ -95,14 +95,17 @@ def edit_profile_view(request):
 
 
 def delete_profile_image(request):
-    if request.method == "POST":
-        profile_image = request.user.profile.profile_image
-        profile_image.delete()
-        response = {"status": "ok"}
-        return HttpResponse(json.dumps(response), content_type=JSON_CONTENT_TYPE)
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            profile_image = request.user.profile.profile_image
+            profile_image.delete()
+            response = {"status": "ok"}
+            return HttpResponse(json.dumps(response), content_type=JSON_CONTENT_TYPE)
+        else:
+            response = ""
+            return HttpResponse(response)
     else:
-        response = ""
-        return HttpResponse(response)
+        return redirect("account_login")
 
 
 @verified_email_required
