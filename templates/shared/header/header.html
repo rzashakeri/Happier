@@ -17,14 +17,15 @@
         <div class="flex-none">
             <ul class="menu menu-horizontal items-center gap-2">
                 {% if request.user.is_authenticated %}
-                    {% include 'components/header/create_post_component.html' %}
+                    {% include 'shared/header/components/create_post_button.html' %}
                 {% endif %}
-                {% include 'components/header/themes_component.html' %}
+                {% include 'shared/header/components/themes_component.html' %}
                 {% if request.user.is_authenticated %}
                     {% render_partial "activity.views.activity" %}
                 {% endif %}
-                {% include 'components/header/profile_component.html' %}
+                {% include 'shared/header/components/profile_component.html' %}
             </ul>
         </div>
     </div>
 </header>
+{% render_partial "post.views.create_new_post_view" %}
