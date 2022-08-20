@@ -98,6 +98,11 @@ def delete_profile_image(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             profile_image = request.user.profile.profile_image
+            try:
+                profile_image.file
+            except ValueError:
+                response = ""
+                return HttpResponse(response)
             profile_image.delete()
             response = {"status": "ok"}
             return HttpResponse(json.dumps(response), content_type=JSON_CONTENT_TYPE)
