@@ -1,10 +1,11 @@
 import json
-
 from allauth.account.decorators import verified_email_required
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-
+from post.forms import UploadPostForm
 from post.models import PostLike, Post
+from utils.text_parser import extract_hashtags
+from django import forms
 
 
 @verified_email_required
@@ -15,6 +16,7 @@ def post_view(request, post_id):
     return render(request, "post/post.html", context)
 
 
+@verified_email_required
 def like_view(request, post_id):
     if request.method == "POST":
         post = Post.objects.get(pk=post_id)
@@ -42,3 +44,16 @@ def show_post_view(request, slug):
     post = Post.objects.get(slug=slug)
     context = {"post": post}
     return render(request, "post/post_layout.html", context)
+
+
+@verified_email_required
+def create_new_post_view(request):
+    upload_post_form = UploadPostForm()
+    if request.method == "POST":
+        upload_post_form = UploadPostForm(request.POST, request.FILES)
+        if upload_post_form.is_valid():
+            print(upload_post_form)
+            print(upload_post_form)
+
+    context = {"upload_post_form": upload_post_form}
+    return render(request, "post/create_new_post.html", context)
