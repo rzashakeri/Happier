@@ -1,5 +1,6 @@
 import json
 from allauth.account.decorators import verified_email_required
+from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from post.forms import UploadPostForm
@@ -52,8 +53,14 @@ def create_new_post_view(request):
     if request.method == "POST":
         upload_post_form = UploadPostForm(request.POST, request.FILES)
         if upload_post_form.is_valid():
-            print(upload_post_form)
-            print(upload_post_form)
+            new_post = upload_post_form.save(commit=False)
+            new_post.user_id = request.user.id
+            new_post.save()
+            messages.success(request, "Your post has been published")
+            return redirect("feed")
+        else:
+            context = {"upload_post_form": upload_post_form}
+            return render(request, "post/create_new_post.html", context)
 
     context = {"upload_post_form": upload_post_form}
     return render(request, "post/create_new_post.html", context)
