@@ -1,0 +1,60 @@
+{% extends 'shared/base.html' %}
+{% load i18n %}
+{% block title %}
+    Create New Post
+{% endblock %}
+{% block content %}
+    <div for="CreateNewPost" class="flex justify-center bg-base-200 py-5">
+        <div class="w-[600px] shadow-lg p-7 rounded-md bg-base-100">
+            <div class="divider"><p class="font-medium">{% translate 'Create new post' %}</p></div>
+            <div class=" w-full max-h-96 rounded-md my-4 flex justify-center">
+                <img id="ImagePreview" src=""
+                     alt="">
+            </div>
+            <form id="CreateNewPostForm" name="CreateNewPost" class="flex flex-col gap-3" method="POST" action="{% url 'upload_post' %}"
+                  enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ upload_post_form.caption }}
+                <div class="flex justify-between gap-2">
+                    <div>
+                        <label for="id_file" class="btn btn-circle btn-ghost">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24"
+                                 class="humbleicons hi-image w-6 h-6">
+                                <path xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-linecap="round"
+                                      stroke-linejoin="round" stroke-width="2"
+                                      d="M21 17l-3.293-3.293a1 1 0 00-1.414 0l-.586.586a1 1 0 01-1.414 0l-2.879-2.879a2 2 0 00-2.828 0L3 17M21 5v14a1 1 0 01-1 1H4a1 1 0 01-1-1V5a1 1 0 011-1h16a1 1 0 011 1zm-5 3a1 1 0 11-2 0 1 1 0 012 0z"></path>
+                            </svg>
+                        </label>
+                        <label for="id_file" class="btn btn-circle btn-ghost">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24"
+                                 class="humbleicons hi-music-note w-6 h-6">
+                                <path xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-linejoin="round"
+                                      stroke-width="2"
+                                      d="M9 18c0 1.105-1.12 2-2.5 2S4 19.105 4 18s1.12-2 2.5-2 2.5.895 2.5 2zm0 0V7l11-3v11m0 0c0 1.105-1.12 2-2.5 2s-2.5-.895-2.5-2 1.12-2 2.5-2 2.5.895 2.5 2z"></path>
+                            </svg>
+                        </label>
+                        <label for="id_file" class="btn btn-circle btn-ghost">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24"
+                                 class="humbleicons hi-camera-video w-6 h-6">
+                                <g xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2">
+                                    <path d="M16 16V8a1 1 0 00-1-1H5a1 1 0 00-1 1v8a1 1 0 001 1h10a1 1 0 001-1z"></path>
+                                    <path stroke-linejoin="round" d="M20 7l-4 3v4l4 3V7z"></path>
+                                </g>
+                            </svg>
+                        </label>
+                    </div>
+                    {{ upload_post_form.file }}
+                    <button id="CreateNewPostButton" type="submit" class="btn btn-success capitalize">Create Post
+                    </button>
+                </div>
+                <div id="PostErrors" class="w-full">
+                    {{ upload_post_form.caption.errors }}
+                    {{ upload_post_form.file.errors }}
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
