@@ -173,5 +173,11 @@ cython_debug/
 
 # Only for Development only
 **/migrations/**
-!**/migrations
-!**/migrations/__init__.py
+**/migrations
+**/migrations/__init__.py!/static_files/
+**/static_files/**
+/static_files/
+static_files/
+/static/
+**/static/**
+static/
