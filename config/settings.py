@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
+import os
 from pathlib import Path
 import environ
 from django.utils.translation import gettext_lazy as _
@@ -55,6 +56,8 @@ INSTALLED_APPS = [
     "crispy_tailwind",
     "captcha",
     "formtools",
+    "tagulous",
+    "django_private_chat2.apps.DjangoPrivateChat2Config",
     # Configure the django-otp package.
     "django_otp",
     "django_otp.plugins.otp_totp",
@@ -71,6 +74,7 @@ INSTALLED_APPS = [
     "post",
     "comment",
     "activity",
+    "ckeditor"
 ]
 
 MIDDLEWARE = [
@@ -148,11 +152,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_files')
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
 # Media Files
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_ROOT = BASE_DIR / "media/"
 
 MEDIA_URL = "media/"
 
@@ -250,5 +255,71 @@ ACTSTREAM_SETTINGS = {
     "GFK_FETCH_DEPTH": 1,
 }
 
-FAKER_LOCALE = None
-FAKER_PROVIDERS = None
+SERIALIZATION_MODULES = {
+    'xml': 'tagulous.serializers.xml_serializer',
+    'json': 'tagulous.serializers.json',
+    'python': 'tagulous.serializers.python',
+    'yaml': 'tagulous.serializers.pyyaml',
+}
+
+CKEDITOR_ALLOW_NONIMAGE_FILES = False
+CKEDITOR_CONFIGS = {
+    'default': {
+        'skin': 'moono-lisa',
+        # 'skin': 'office2013',
+        'toolbar_Basic': [
+            ['Source', 'Bold', 'Italic']
+        ],
+        'toolbar_YourCustomToolbarConfig': [
+            {'name': 'editing', 'items': ['Find', 'Replace', 'SelectAll', 'CodeSnippet', 'Justify']},
+            {'name': 'basicstyles', 'items': ['Bold', 'Italic', 'Underline', 'Strike']},
+            {'name': 'colors', 'items': ['TextColor', 'BGColor']},
+            {'name': 'tools', 'items': ['Maximize', 'EmojiPanel']},
+            {'name': 'paragraph', 'items': ['NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote',
+                                            'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'BidiLtr', 'BidiRtl']},
+            {'name': 'links', 'items': ['Link', 'Unlink']},
+            {'name': 'insert', 'items': ['Textmatch', 'Textwatcher', 'Autocomplete']},
+            {'name': 'styles', 'items': ['Styles', 'Format', 'Font']},
+            {'name': 'yourcustomtools', 'items': [
+                # put the name of your editor.ui.addButton here
+                'Maximize', 'Preview'
+            ]},
+        ],
+        'toolbar': 'YourCustomToolbarConfig',  # put selected toolbar config here
+        # 'toolbarGroups': [{ 'name': 'document', 'groups': [ 'mode', 'document', 'doctools' ] }],
+        'height': 291,
+        'width': '100%',
+        # 'filebrowserWindowHeight': 725,
+        # 'filebrowserWindowWidth': 940,
+        'toolbarCanCollapse': True,
+        # 'mathJaxLib': '//cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?config=TeX-AMS_HTML',
+        'tabSpaces': 4,
+        'extraPlugins': ','.join([
+            # 'uploadimage', # the upload image feature
+            # your extra plugins here
+            'div',
+            'autolink',
+            'autoembed',
+            'embedsemantic',
+            'autogrow',
+            # 'devtools',
+            'widget',
+            'lineutils',
+            'clipboard',
+            'dialog',
+            'dialogui',
+            'elementspath',
+            'codesnippet',
+            'EmojiPanel',
+            'textmatch',
+            'textwatcher',
+            'autocomplete',
+            'justify'
+        ]),
+        'wordcount': {
+            'showCharCount': True,
+            'maxCharCount': 1500
+        }
+
+    }
+}
