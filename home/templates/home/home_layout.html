@@ -1,7 +1,7 @@
 <!doctype html>
 <html data-theme="light" lang="en">
 <head>
-    {% include 'shared/haeder_references.html' %}
+    {% include 'shared/references/haeder_references.html' %}
     <title>social network</title>
 </head>
 <body>
@@ -29,13 +29,11 @@
         </div>
     {% endfor %}
 {% endif %}
-{% include 'components/header/header_component.html' %}
+{% include 'shared/header/header.html' %}
 <main>
     {% include 'home/components/home_body.html' %}
 </main>
-{% include 'components/footer/footer_component.html' %}
-
-
+{% include 'shared/footer/footer.html' %}
 </body>
-{% include 'shared/footer_references.html' %}
+{% include 'shared/references/footer_references.html' %}
 </html>
