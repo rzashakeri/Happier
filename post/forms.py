@@ -1,6 +1,6 @@
 from django import forms
 from docutils.nodes import caption
-from file_validator.django import FileValidator
+from file_validator.models import FileValidator
 from ckeditor.widgets import CKEditorWidget
 from post.models import Post
 
