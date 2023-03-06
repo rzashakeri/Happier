@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html data-theme="light" lang="en">
 <head>
-    {% include 'shared/haeder_references.html' %}
+    {% include 'shared/references/haeder_references.html' %}
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
@@ -14,11 +14,11 @@
             {% block content %}
             {% endblock %}
         </main>
-        {% include 'components/footer/footer_component.html' %}
+        {% include 'shared/footer/footer.html' %}
     </div>
-    {% include "components/header/drawer_side_component.html" %}
+    {% include "shared/header/components/drawer_side_component.html" %}
 </div>
 </body>
-{% include 'shared/footer_references.html' %}
+{% include 'shared/references/footer_references.html' %}
 {% block footer_references %}{% endblock %}
 </html>
