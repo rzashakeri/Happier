@@ -1,12 +1,12 @@
 # Happier
 a social network created by django
 
-Full User Authorization
-Two-Factor Authentication
-Customize Profile
-Follow And Unfollow
-Like And Comment
-Supported Any Type Of Media For Share
+1. Full User Authorization
+2. Two-Factor Authentication
+3. Customize Profile
+4. Follow And Unfollow
+5. Like And Comment
+6. Supported Any Type Of Media For Share
 
 
 # Screenshots
