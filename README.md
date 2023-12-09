@@ -7,6 +7,7 @@ a social network created by django
 4. Follow And Unfollow
 5. Like And Comment
 6. Supported Any Type Of Media For Share
+etc...
 
 
 # Screenshots
